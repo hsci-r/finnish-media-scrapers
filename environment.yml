@@ -1,0 +1,14 @@
+name: MediaScraper
+#channels:
+# - conda-forge
+dependencies:
+ - python=3
+ - selenium
+ - beautifulsoup4
+ - requests
+ - python-chromedriver-binary
+ - pip
+ - pip:
+   - typed-argument-parser
+# - newspaper3k
+# - scrapy
