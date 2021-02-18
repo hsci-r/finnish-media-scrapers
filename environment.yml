@@ -6,8 +6,5 @@ dependencies:
   - selenium
   - beautifulsoup4
   - requests
-  - pip
-  - pip:
-      - typed-argument-parser
 # - newspaper3k
 # - scrapy

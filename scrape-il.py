@@ -9,26 +9,26 @@ import csv
 import random
 from time import sleep
 
-from typing import Any, Optional, Sequence, Dict, Callable
-import _csv
-
 logging.basicConfig(level=logging.INFO)
 # %%
-from tap import Tap
-class ArgumentParser(Tap):
-    from_date: str # from date (inclusive, YYYY-MM-DD)
-    to_date: Optional[str] = None # to date (inclusive, YYYY-MM-DD, defaults to today)
-    query: str # query string to search for (actually a stem search)
-    limit: int = 200 # number of articles to fetch per query (max==200)
-    output: str # output CSV file
-    delay: float = 1.0 # number of seconds to wait between consecutive requests
-    articles: Optional[str] = None # directory to fetch articles into (optional)
-    quiet: bool = False # Log only errors
+
+import argparse
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f','--from-date',help="from date (inclusive, YYYY-MM-DD)",required=True)
+    parser.add_argument('-t','--to-date',help="to date (inclusive, YYYY-MM-DD, defaults to today)")
+    parser.add_argument('-q','--query',help="query string to search for",required=True)
+    parser.add_argument('-o','--output',help="output CSV file",required=True)
+    parser.add_argument('-a','--articles',help="directory to fetch articles into (optional)")
+    parser.add_argument('-l','--limit',help="number of articles to fetch per query (max==200)",default=200,type=int)
+    parser.add_argument('-d','--delay',help="number of seconds to wait between consecutive requests",default=1.0,type=float)
+    parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")    
+    return parser.parse_args()
 
 api: str = "https://api.il.fi/v1/articles/search"
 
 def main():
-    args = ArgumentParser().parse_args()
+    args = parse_arguments()
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
     if args.articles is not None:
