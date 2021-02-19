@@ -40,8 +40,12 @@ def build_url(query: str, offset: int, limit: int, date_start: int, date_end: in
 def main():
     args = parse_arguments()
     # for testing: args = {'delay': 1.0, 'from_date':'2020-02-16', 'limit': 10, 'output':'output.csv', 'query':'SDP', 'to_date':'2020-02-18', 'articles': 'articles/'}
+    
+    if args.quiet:
+        logging.basicConfig(level=logging.ERROR)
 
     try:
+        driver = None
         if args.articles is not None:
             driver = webdriver.Remote(desired_capabilities=webdriver.DesiredCapabilities.CHROME)
             os.makedirs(args.articles,exist_ok=True)
