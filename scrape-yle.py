@@ -10,9 +10,7 @@ import random
 from datetime import datetime, timedelta
 from time import sleep
 import time
-
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
+from bs4 import BeautifulSoup
 
 logging.basicConfig(level=logging.INFO)
 # %%
@@ -45,15 +43,11 @@ def main():
         logging.basicConfig(level=logging.ERROR)
 
     try:
-        driver = None
         if args.articles is not None:
-            driver = webdriver.Remote(desired_capabilities=webdriver.DesiredCapabilities.CHROME)
             os.makedirs(args.articles,exist_ok=True)
         with open(args.output,"w") as of:
             co = csv.writer(of)
             co.writerow(['url','title','date_modified'])
-            #date_start = int(datetime.timestamp(datetime.fromisoformat(args['from_date'])) * 1000)
-            #date_end = int(datetime.timestamp((datetime.fromisoformat(args['to_date']) if args['to_date'] is not None else datetime.now()) + timedelta(days=1)) * 1000)
             date_start = args.from_date
             date_end = args.to_date
             offset = 0
@@ -72,10 +66,9 @@ def main():
                     if args.articles is not None:
                         sleep(random.randrange(args.delay*2))
                         file = os.path.join(args.articles,"art-"+str(a['id'])+".html")
-                        with open(file,"w") as af:
-                            driver.get(url)
-                            article = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath('//*[contains(concat( " ", @class, " " ), concat( " ", "yle__article__content", " " ))]')).get_attribute('innerHTML')
-                            af.write(article)
+                        with open(file,"wb") as af:
+                            article_request = requests.get(url)
+                            af.write(article_request.content)
                         logging.info(f"wrote article into {file}")
                 if len(r['data'])!=args.limit:
                     logging.info(f"Processed {len(r)} results which is less than the limit, assuming we're done.")
@@ -86,8 +79,7 @@ def main():
                     response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
                     r = response.json()
     finally:
-        if driver is not None:
-            driver.close()
+        print("done")
 
 if __name__ == '__main__':
     main()
