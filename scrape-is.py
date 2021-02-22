@@ -37,9 +37,7 @@ def parse_arguments():
 api: str = "https://www.is.fi/api/search"
 
 def build_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
-    url = f"{api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
-    print(url)
-    return url
+    return f"{api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
 
 def main():
     args = parse_arguments()
@@ -80,7 +78,7 @@ def main():
                         with open(file,"w") as af:
                             article_request = requests.get(url)
                             content = article_request.content.decode("utf-8")
-                            af.write(content)
+                            af.write("<!DOCTYPE html> <head><meta charset='utf-8'></head>" + content + "</html>")
                         logging.info(f"wrote article into {file}")
                 if len(r)!=args.limit:
                     logging.info(f"Processed {len(r)} results which is less than the limit, assuming we're done {offset}.")
