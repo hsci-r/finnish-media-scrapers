@@ -51,21 +51,19 @@ def main():
         with open(args.output,"w") as of:
             co = csv.writer(of)
             co.writerow(['url','title''date_modified','lead'])
-            #2020-10-15
-            print(datetime.fromisoformat("2020-10-15"))
             date_start = int(datetime.timestamp(datetime.fromisoformat(args.from_date)) * 1000)
             date_end = int(datetime.timestamp((datetime.fromisoformat(args.to_date) if args.to_date is not None else datetime.now()) + timedelta(days=1)) * 1000)
-            print(int(datetime.timestamp(datetime.fromisoformat("2021-02-13")) * 1000))
             
             offset = 0
             response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
             r = response.json()
-            print(len(r))
+            total_count = 0
             while True:
                 if r is None:
                     logging.info("Got empty repsonse for {response.url}")
                     break
                 logging.info(f"Processing {len(r)} articles from {response.url}")
+                total_count += len(r)
                 for a in r:
                     url = 'https://www.is.fi'+a['href']
                     title = a['title']
@@ -89,7 +87,7 @@ def main():
                     response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
                     r = response.json()
     finally:
-        print("done")
+        logging.info(f"Processed totally {total_count} articles")
 
 if __name__ == '__main__':
     main()

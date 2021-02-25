@@ -44,12 +44,14 @@ def main():
             'limit':args.limit
             }
         response = requests.get(api,params)
-        r = response.json()['response']        
+        r = response.json()['response'] 
+        total_count = 0
         while True:
             if r is None:
                 logging.info("Got empty repsonse for {response.url}")
                 break
             logging.info(f"Processing {len(r)} articles from {response.url}")
+            total_count += len(r)
             for a in r:
                 url = 'http://iltalehti.fi/'+a['category']['category_name']+"/a/"+a['article_id']
                 title = a['title']
@@ -65,6 +67,7 @@ def main():
                     logging.info(f"wrote article into {file}")
             if len(r)!=args.limit:
                 logging.info(f"Processed {len(r)} results which is less than the limit, assuming we're done.")
+                logging.info(f"Processed totally {total_count} articles")
                 break
             else:
                 params['offset']+=args.limit
