@@ -61,6 +61,7 @@ def main():
             date_end = int(datetime.timestamp((datetime.fromisoformat(args.to_date) if args.to_date is not None else datetime.now()) + timedelta(days=1)) * 1000)
             offset = 0
             response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
+            total_count = 0
             while True:
                 if response.status_code != 200:
                     logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
@@ -72,6 +73,7 @@ def main():
                 if len(r)==0:
                     logging.info(f"Got 0 results, assuming we're done.")
                     break
+                total_count += len(r)
                 logging.info(f"Processing {len(r)} articles from {response.url}")
                 for a in r:
                     url = 'https://www.hs.fi'+a['href']
@@ -94,8 +96,10 @@ def main():
                 sleep(random.randrange(args.delay*2))
                 response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
     finally:
+        logging.info(f"Processed totally {total_count} articles")
         if driver is not None:
             driver.close()
+            
 
 if __name__ == '__main__':
     main()
