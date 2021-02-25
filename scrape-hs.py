@@ -27,7 +27,7 @@ def parse_arguments():
   parser.add_argument('-a','--articles',help="directory to fetch articles into (optional)")
   parser.add_argument('-u','--username',help="email to use for article fetching")
   parser.add_argument('-p','--password',help="password to use for article fetching")
-  parser.add_argument('-l','--limit',help="number of articles to fetch per query (max==50)",default=50,type=int)
+  parser.add_argument('-l','--limit',help="number of articles to fetch per query (50/100)",default=100,type=int)
   parser.add_argument('-d','--delay',help="number of seconds to wait between consecutive requests",default=1.0,type=float)
   parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")
   return(parser.parse_args())
@@ -61,10 +61,16 @@ def main():
             date_end = int(datetime.timestamp((datetime.fromisoformat(args.to_date) if args.to_date is not None else datetime.now()) + timedelta(days=1)) * 1000)
             offset = 0
             response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
-            r = response.json()
             while True:
+                if response.status_code != 200:
+                    logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
+                    break
+                r = response.json()
                 if r is None:
-                    logging.info("Got empty repsonse for {response.url}")
+                    logging.error(f"Got empty response for {response.url}")
+                    break
+                if len(r)==0:
+                    logging.info(f"Got 0 results, assuming we're done.")
                     break
                 logging.info(f"Processing {len(r)} articles from {response.url}")
                 for a in r:
@@ -81,14 +87,12 @@ def main():
                             article = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@id='page-main-content']/following-sibling::*")).get_attribute('innerHTML')
                             af.write(article)
                         logging.info(f"wrote article into {file}")
-                if len(r)!=args.limit:
-                    logging.info(f"Processed {len(r)} results which is less than the limit, assuming we're done.")
+                offset += args.limit
+                if offset >= 10000:
+                    logging.error("HS API refuses to return more than 10000 results, which we've now crawled. You can work around this limitation by doing multiple queries on smaller timespans.")
                     break
-                else:
-                    offset += args.limit
-                    sleep(random.randrange(args.delay*2))
-                    response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
-                    r = response.json()
+                sleep(random.randrange(args.delay*2))
+                response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
     finally:
         if driver is not None:
             driver.close()
