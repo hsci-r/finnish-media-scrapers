@@ -53,11 +53,13 @@ def main():
             offset = 0
             response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
             r = response.json()
+            total_count = 0
             while True:
                 if r is None:
                     logging.info("Got empty repsonse for {response.url}")
                     break
-                logging.info(f"Processing {len(r)} articles from {response.url}")
+                logging.info(f"Processing {len(r['data'])} articles from {response.url}")
+                total_count += len(r['data'])
                 for a in r['data']:
                     url = a['url']['full']
                     title = a['headline']
@@ -71,7 +73,7 @@ def main():
                             af.write(article_request.content)
                         logging.info(f"wrote article into {file}")
                 if len(r['data'])!=args.limit:
-                    logging.info(f"Processed {len(r)} results which is less than the limit, assuming we're done.")
+                    logging.info(f"Processed {len(r['data'])} results which is less than the limit, assuming we're done.")
                     break
                 else:
                     offset += args.limit
@@ -79,7 +81,7 @@ def main():
                     response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
                     r = response.json()
     finally:
-        print("done")
+         logging.info(f"Processed totally {total_count} articles")
 
 if __name__ == '__main__':
     main()
