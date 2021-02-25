@@ -39,8 +39,18 @@ def build_url(query: str, offset: int, limit: int, date_start: int, date_end: in
 
 def main():
     args = parse_arguments()
+    date_start = int(datetime.timestamp(datetime.fromisoformat(args.from_date)) * 1000)
+    date_end = int(datetime.timestamp((datetime.fromisoformat(args.to_date) if args.to_date is not None else datetime.now()) + timedelta(days=1)) * 1000)
+    response = requests.get(build_url(args.query,9950,50,date_start,date_end))
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
+    if response.status_code != 200:
+        logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
+        return
+    r = response.json()
+    if len(r)!=0:
+        logging.error("Query results in more than 9950 results. The HS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+        return
     try:
         driver = None
         if args.articles is not None:
@@ -57,8 +67,6 @@ def main():
         with open(args.output,"w") as of:
             co = csv.writer(of)
             co.writerow(['url','title''date_modified','lead'])
-            date_start = int(datetime.timestamp(datetime.fromisoformat(args.from_date)) * 1000)
-            date_end = int(datetime.timestamp((datetime.fromisoformat(args.to_date) if args.to_date is not None else datetime.now()) + timedelta(days=1)) * 1000)
             offset = 0
             response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
             total_count = 0
