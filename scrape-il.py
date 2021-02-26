@@ -44,11 +44,14 @@ def main():
             'limit':args.limit
             }
         response = requests.get(api,params)
-        r = response.json()['response'] 
         total_count = 0
         while True:
+            if response.status_code != 200:
+                logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
+                break
+            r = response.json()['response'] 
             if r is None:
-                logging.info("Got empty repsonse for {response.url}")
+                logging.error(f"Got empty response for {response.url}")
                 break
             logging.info(f"Processing {len(r)} articles from {response.url}")
             total_count += len(r)
@@ -73,7 +76,6 @@ def main():
                 params['offset']+=args.limit
                 sleep(random.randrange(args.delay*2))
                 response = requests.get(api,params)
-                r = response.json()['response']
 
 
 if __name__ == '__main__':
