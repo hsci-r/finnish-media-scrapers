@@ -41,9 +41,9 @@ def main():
     args = parse_arguments()
     date_start = int(datetime.timestamp(datetime.fromisoformat(args.from_date)) * 1000)
     date_end = int(datetime.timestamp((datetime.fromisoformat(args.to_date) if args.to_date is not None else datetime.now()) + timedelta(days=1)) * 1000)
-    response = requests.get(build_url(args.query,9950,50,date_start,date_end))
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
+    response = requests.get(build_url(args.query,9950,50,date_start,date_end))
     if response.status_code != 200:
         logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
         return
@@ -98,9 +98,6 @@ def main():
                             af.write(article)
                         logging.info(f"wrote article into {file}")
                 offset += args.limit
-                if offset >= 10000:
-                    logging.error("HS API refuses to return more than 10000 results, which we've now crawled. You can work around this limitation by doing multiple queries on smaller timespans.")
-                    break
                 sleep(random.randrange(args.delay*2))
                 response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
     finally:

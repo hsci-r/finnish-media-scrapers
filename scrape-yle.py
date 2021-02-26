@@ -42,21 +42,35 @@ def main():
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
 
+    date_start = args.from_date
+    date_end = args.to_date
+    response = requests.get(build_url(args.query,0,0,date_start,date_end))
+    if response.status_code != 200:
+        logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
+        return
+    r = response.json()
+    if r is None:
+        logging.error(f"Got empty response for {response.url}")
+        return
+    if r['meta']['count']>10000:
+        logging.error(f"Query results in {r['meta']['count']} results. The YLE API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+        return
     try:
         if args.articles is not None:
             os.makedirs(args.articles,exist_ok=True)
         with open(args.output,"w") as of:
             co = csv.writer(of)
             co.writerow(['url','title','date_modified'])
-            date_start = args.from_date
-            date_end = args.to_date
             offset = 0
             response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
-            r = response.json()
             total_count = 0
             while True:
+                if response.status_code != 200:
+                    logging.error(f"Got unexpected response code {response.status_code} for {response.url}.")
+                    break
+                r = response.json()
                 if r is None:
-                    logging.info("Got empty repsonse for {response.url}")
+                    logging.error(f"Got empty response for {response.url}")
                     break
                 logging.info(f"Processing {len(r['data'])} articles from {response.url}")
                 total_count += len(r['data'])
@@ -79,7 +93,6 @@ def main():
                     offset += args.limit
                     sleep(random.randrange(args.delay*2))
                     response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
-                    r = response.json()
     finally:
          logging.info(f"Processed totally {total_count} articles")
 
