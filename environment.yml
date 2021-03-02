@@ -6,5 +6,6 @@ dependencies:
   - selenium
   - beautifulsoup4
   - requests
+  - lxml
 # - newspaper3k
 # - scrapy
