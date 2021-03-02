@@ -10,7 +10,7 @@ The easiest way to install the required dependencies for these scripts is throug
 
 # Helsingin Sanomat
 
-For downloading articles (instead of just listing them), this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-prerelease-20210210` in another console before invoking the script.
+For downloading articles (instead of just listing them), this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script.
 
 Known special considerations:
 
