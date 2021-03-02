@@ -54,7 +54,13 @@ def main():
     try:
         driver = None
         if args.articles is not None:
-            driver = webdriver.Remote(desired_capabilities=webdriver.DesiredCapabilities.CHROME)
+            logging.info("Connecting to Selenium.")
+            try:
+                driver = webdriver.Remote(desired_capabilities=webdriver.DesiredCapabilities.CHROME)
+            except:
+                logging.error("Requested article download, but Selenium is not running on localhost.")
+                return
+            logging.info("Logging into HS.")
             driver.get("https://www.hs.fi")
             login = driver.find_element_by_xpath("//*[contains(text(), 'Kirjaudu')]")
             driver.execute_script("arguments[0].click();", login)
@@ -63,6 +69,7 @@ def main():
             pas = driver.find_element_by_id("password")
             pas.send_keys(args.password),
             pas.submit()
+            logging.info("Logged in.")
             os.makedirs(args.articles,exist_ok=True)
         with open(args.output,"w") as of:
             co = csv.writer(of)
@@ -94,14 +101,18 @@ def main():
                         file = os.path.join(args.articles,"art-"+str(a['id'])+".html")
                         with open(file,"w") as af:
                             driver.get(url)
-                            article = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@id='page-main-content']/following-sibling::*")).get_attribute('innerHTML')
-                            af.write(article)
+                            dynamic_content = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@id='page-main-content']/following-sibling::*"))
+                            if dynamic_content.tag_name == 'iframe':
+                                driver.switch_to.frame(dynamic_content)
+                                WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@class='paywall-content']"))
+                            article = driver.find_element_by_xpath('/*').get_attribute('innerHTML')
+                            af.write("<!DOCTYPE html><head><meta charset='utf-8'></head>" + article + "</html>")
                         logging.info(f"wrote article into {file}")
                 offset += args.limit
                 sleep(random.randrange(args.delay*2))
                 response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
+            logging.info(f"Processed totally {total_count} articles")
     finally:
-        logging.info(f"Processed totally {total_count} articles")
         if driver is not None:
             driver.close()
             
