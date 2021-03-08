@@ -30,6 +30,10 @@ def main() -> None:
             e = s.select_one('div#page-main-content + article')
             if e is not None:
                 s = e
+            else:
+                e = s.select_one('div#page-main-content')
+                if e is not None:
+                    s = e
             for e in s.find_all('aside'):
                 e.extract()
             for e in s.select('section.article-body + div'):
