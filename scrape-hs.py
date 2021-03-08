@@ -13,6 +13,7 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 logging.basicConfig(level=logging.INFO)
 # %%
@@ -101,10 +102,13 @@ def main():
                         file = os.path.join(args.articles,"art-"+str(a['id'])+".html")
                         with open(file,"w") as af:
                             driver.get(url)
-                            dynamic_content = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@id='page-main-content']/following-sibling::*"))
-                            if dynamic_content.tag_name == 'iframe':
-                                driver.switch_to.frame(dynamic_content)
-                                WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@class='paywall-content']"))
+                            try:
+                                dynamic_content = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@id='page-main-content']/following-sibling::*"))
+                                if dynamic_content.tag_name == 'iframe':
+                                    driver.switch_to.frame(dynamic_content)
+                                    WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@class='paywall-content']|//div[@id='paid-content']"))
+                            except TimeoutException:
+                                logging.warning(f"Couldn't find the dynamic content I was looking for in {url}. There may be a class of HS articles we're not yet handling.")
                             article = driver.find_element_by_xpath('/*').get_attribute('innerHTML')
                             af.write("<!DOCTYPE html><head><meta charset='utf-8'></head>" + article + "</html>")
                         logging.info(f"wrote article into {file}")
