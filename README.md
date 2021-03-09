@@ -10,7 +10,9 @@ The easiest way to install the required dependencies for these scripts is throug
 
 ## Helsingin Sanomat
 
-For downloading articles (instead of just listing them), this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script.
+First, query the articles you want using `query-hs.py`. For example, `python query-hs.py -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
+
+For downloading articles, this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script. After these prequisites are fulfilled, you can fetch the articles using `fetch-hs.py`. For example `python fetch-hs.py -i hs-sdp.csv -o hs-sdp`.
 
 Known special considerations:
 
@@ -21,9 +23,17 @@ Known special considerations:
 
 Known special considerations:
 
-- A single query can return at most 9,950 hits. This can be sidestepped by invoking the script multiple times with smaller query time spans.
+- A single query can return at most 10,000 hits. This can be sidestepped by invoking the script multiple times with smaller query time spans.
 
-example: `python scrape-yle.py -f 2020-02-16 -t 2020-02-18 -o output.csv -q SDP `
+example: `python query-yle.py -f 2020-02-16 -t 2020-02-18 -o yle-sdp.csv -q SDP` + `python fetch-open.py -i yle-sdp.csv -o yle-sdp`
+
+## Iltalehti
+
+example: `python query-il.py -f 2020-02-16 -t 2020-02-18 -o il-sdp.csv -q SDP` + `python fetch-open.py -i il-sdp.csv -o il-sdp`
+
+## Iltasanomat
+
+example: `python query-is.py -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` + `python fetch-open.py -i is-sdp.csv -o is-sdp`
 
 ## Contact
 
