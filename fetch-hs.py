@@ -3,11 +3,9 @@
 # %%
 
 import os
-import requests
 import logging
 import csv
 import random
-from datetime import datetime, timedelta
 from time import sleep
 
 from selenium import webdriver
@@ -24,7 +22,6 @@ def parse_arguments():
   parser.add_argument('-o','--output',help="directory to fetch articles into",required=True)
   parser.add_argument('-u','--username',help="email to use for article fetching")
   parser.add_argument('-p','--password',help="password to use for article fetching")
-  parser.add_argument('-l','--limit',help="number of articles to fetch per query (50/100)",default=100,type=int)
   parser.add_argument('-d','--delay',help="number of seconds to wait between consecutive requests",default=1.0,type=float)
   parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")
   return(parser.parse_args())
@@ -56,8 +53,8 @@ def main():
             cr = csv.DictReader(inf)
             for a in cr:
                 file = os.path.join(args.output,"art-"+str(a['id'])+".html")
-                url = a['url']
                 if not os.path.exists(file):
+                    url = a['url']
                     driver.get(url)
                     try:
                         dynamic_content = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//div[@id='page-main-content']/following-sibling::*"))

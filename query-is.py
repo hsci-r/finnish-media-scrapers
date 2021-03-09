@@ -2,6 +2,7 @@
 
 # %%
 
+import os
 import requests
 import logging
 import csv
@@ -24,7 +25,7 @@ def parse_arguments():
   parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")
   return(parser.parse_args())
 
-api: str = "https://www.hs.fi/api/search"
+api: str = "https://www.is.fi/api/search"
 
 def build_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
     return f"{api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
@@ -41,7 +42,7 @@ def main():
         return
     r = response.json()
     if len(r)!=0:
-        logging.error("Query results in more than 9950 results. The HS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+        logging.error("Query results in more than 9950 results. The IS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
         return
     with open(args.output,"w") as of:
         co = csv.writer(of)
@@ -60,10 +61,10 @@ def main():
             if len(r)==0:
                 logging.info(f"Got 0 results, assuming we're done.")
                 break
-            total_count += len(r)
             logging.info(f"Processing {len(r)} articles from {response.url}")
+            total_count += len(r)
             for a in r:
-                url = 'https://www.hs.fi'+a['href']
+                url = 'https://www.is.fi'+a['href']
                 title = a['title']
                 date_modified = a['displayDate']
                 lead = a['ingress'] if 'ingress' in a else ''

@@ -2,7 +2,6 @@
 
 # %%
 
-import os
 import requests
 import logging
 import csv
@@ -19,7 +18,6 @@ def parse_arguments():
     parser.add_argument('-t','--to-date',help="to date (inclusive, YYYY-MM-DD, defaults to today)")
     parser.add_argument('-q','--query',help="query string to search for",required=True)
     parser.add_argument('-o','--output',help="output CSV file",required=True)
-    parser.add_argument('-a','--articles',help="directory to fetch articles into (optional)")
     parser.add_argument('-l','--limit',help="number of articles to fetch per query (max==200)",default=200,type=int)
     parser.add_argument('-d','--delay',help="number of seconds to wait between consecutive requests",default=1.0,type=float)
     parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")    
@@ -31,11 +29,9 @@ def main():
     args = parse_arguments()
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
-    if args.articles is not None:
-        os.makedirs(args.articles,exist_ok=True)
     with open(args.output,"w") as of:
         co = csv.writer(of)
-        co.writerow(['url','title','date_created','date_modified','lead'])
+        co.writerow(['id','url','title','date_created','date_modified','lead'])
         params = {
             'date_start':args.from_date,
             'date_end':args.to_date,
@@ -53,6 +49,9 @@ def main():
             if r is None:
                 logging.error(f"Got empty response for {response.url}")
                 break
+            if len(r)==0:
+                logging.info(f"Got 0 results, assuming we're done.")
+                break
             logging.info(f"Processing {len(r)} articles from {response.url}")
             total_count += len(r)
             for a in r:
@@ -61,21 +60,12 @@ def main():
                 date_created = a['published_at']
                 date_modified = a['updated_at'] if a['updated_at'] is not None else date_created
                 lead = a['lead']
-                co.writerow([url,title,date_created,date_modified,lead])
-                if args.articles is not None:
-                    sleep(random.randrange(args.delay*2))
-                    file = os.path.join(args.articles,a['article_id']+".html")
-                    with open(file,"wb") as af:
-                        af.write(requests.get(url).content)
-                    logging.info(f"wrote article into {file}")
-            if len(r)!=args.limit:
-                logging.info(f"Processed {len(r)} results which is less than the limit, assuming we're done.")
-                logging.info(f"Processed totally {total_count} articles")
-                break
-            else:
-                params['offset']+=args.limit
-                sleep(random.randrange(args.delay*2))
-                response = requests.get(api,params)
+                id = a['article_id']
+                co.writerow([id,url,title,date_created,date_modified,lead])
+            params['offset']+=args.limit
+            sleep(random.randrange(args.delay*2))
+            response = requests.get(api,params)
+        logging.info(f"Processed {total_count} articles in total.")
 
 
 if __name__ == '__main__':
