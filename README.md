@@ -1,5 +1,8 @@
 # Finnish Media Scrapers
 
+[![DOI](https://zenodo.org/badge/335605978.svg)](https://zenodo.org/badge/latestdoi/335605978)
+
+
 Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/). The scrapers support specifying a keyword as well as a timespan for extraction, and support either getting a CSV of all matching articles with links, or of also downloading the articles in HTML format.
 
 Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources.
