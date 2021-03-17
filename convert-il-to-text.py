@@ -22,24 +22,13 @@ def main() -> None:
         ofile = os.path.join(args.output_directory,Path(ifile).name).replace(".html",".txt")
         with open(ifile) as inf:
             s = BeautifulSoup(inf,'lxml')
+            
             output = ""
-            headings = s.select('.article-headline')
-            if headings is not None:
-                for h in headings:
-                    output += h.get_text() + "\n"
                     
-            descriptions = s.select('.article-description-pov-text')
-            if descriptions is not None:
-                for d in descriptions:
-                    output += d.get_text() + "\n"
-            
-            
-            e = s.select('.paragraph')
-            if e is not None:
-                s = e
-            
-            for r in s:
-                output += r.get_text() + "\n" 
+            elements = s.select('.article-description-pov-text,.article-description,.article-headline,.paragraph,h3,h1,h2')
+            if elements is not None:
+                for e in elements:
+                    output += e.get_text() + "\n"
 
             with open(ofile,"w") as of:
                 of.write(output)
