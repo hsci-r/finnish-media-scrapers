@@ -49,6 +49,7 @@ def main():
         pas.submit()
         logging.info("Logged in.")
         os.makedirs(args.output,exist_ok=True)
+        sleep(3)
         with open(args.input) as inf:
             cr = csv.DictReader(inf)
             for a in cr:
