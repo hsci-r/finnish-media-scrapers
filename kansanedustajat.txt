@@ -1,6 +1,6 @@
 Anders Adlercreutz,r 
 Pekka Aittakum*,kesk 
-Outi Alanko-Kahiluo*, vihr 
+Outi Alanko*, vihr 
 Li Andersson,vas 
 Sanna Antikai*,ps,perus 
 Paavo Arhinmä*, vas 
@@ -19,12 +19,12 @@ Seppo Eskeli*,sd
 Sari Essayah,kd,kristillis* 
 Tarja Filatov,sd 
 Bella Forsgrén,vihr 
-Sanni Grahn-Laaso*,kok 
+Sanni Grahn*,kok 
 Jukka Gustafsson,sd 
 Maria Guzenina,sd 
 Tuula Haatai*,sd 
 Pekka Haavisto,vihr 
-Jussi Halla-aho,ps,perus 
+Jussi Halla*,ps,perus 
 Timo Harak*,sd 
 Atte Harjan*,vihr 
 Harry Harkimo,liik 
@@ -63,7 +63,7 @@ Pia Kauma,kok
 Ville Kaunisto,kok 
 Juho Kaut*,vas 
 Hilkka Kemp*,kesk 
-Pihla Keto-Huovi*,kok 
+Pihla Keto*,kok 
 Tuomas Kettu*,keks 
 Anneli Kilju*,sd 
 Kimmo Kilju*,sd 
@@ -116,7 +116,7 @@ Jari Myllykosk*,vas
 Juha Mäenpää,ps,perus 
 Jani Mäkelä,ps,perus 
 Riitta Mäki*,sd 
-Merja Mäkisalo-Roppo*,sd 
+Merja Mäkisalo*,sd 
 Jukka Mäky*,ps,perus 
 Matias Mäky*,sd 
 Veijo Niem*,ps,perus 
@@ -124,7 +124,7 @@ Mika Niik*,ps,perus
 Anders Norrback,r 
 Ilmari Nurmi*,sd 
 Maria Ohisalo,vihr 
-Johanna Ojala-Niemelä,sd 
+Johanna Ojala*,sd 
 Mikko Ollikai*,r 
 Petteri Orpo,kok 
 Jouni Ovaska,kesk 
@@ -143,7 +143,7 @@ Juha Pylvä*,kesk
 Lulu Ran*,ps,perus 
 Mari Ranta*,ps,perus 
 Piritta Ranta*,sd 
-Veronica Rehn-Kiv*,r 
+Veronica Rehn*,r 
 Minna Reijo*,ps,perus 
 Antti Rin*,sd 
 Paula Risik*,kok 
@@ -165,11 +165,11 @@ Juha Sipilä,kesk
 Saara-Sofia Sirén,kok 
 Ruut Sjöblom,kok 
 Ville Skinnari,sd 
-Riikka Slunga-Poutsalo,ps,perus 
+Riikka Slunga*,ps,perus 
 Mirka Soinikosk*,vihr 
 Joakim Strand,r 
 Iiris Suomela,vihr 
-Hussein al-Taee,sd 
+Hussein al*,sd 
 Katja Taimela,sd 
 Mari-Leena Talvitie,kok 
 Sari Tanu*,kd,kristillis 
