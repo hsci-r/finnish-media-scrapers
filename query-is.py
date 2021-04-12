@@ -46,7 +46,7 @@ def main():
         return
     with open(args.output,"w") as of:
         co = csv.writer(of)
-        co.writerow(['id','url','title''date_modified','lead'])
+        co.writerow(['id','url','title','date_modified','lead'])
         offset = 0
         response = requests.get(build_url(args.query,offset,args.limit,date_start,date_end))
         total_count = 0
