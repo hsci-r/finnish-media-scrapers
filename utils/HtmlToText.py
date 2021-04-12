@@ -32,7 +32,10 @@ class HtmlToText(ABC):
                 with open(ifile) as inf:
                     s = BeautifulSoup(inf,'lxml')
                     content = self.extract(s)
-                    with open(ofile,"w") as of:
-                        of.write(content)
-                    logging.info(f"Extracted text from {ifile} into {ofile}.")
+                    if content=="":
+                        logging.error(f"Couldn't extract text from {ifile}.")
+                    else:
+                        with open(ofile,"w") as of:
+                            of.write(content)
+                        logging.info(f"Extracted text from {ifile} into {ofile}.")
 

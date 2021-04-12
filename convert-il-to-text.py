@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup,NavigableString
 from utils.HtmlToText import HtmlToText
 
 class IlHtmlToText(HtmlToText):
     def extract(self, s: BeautifulSoup) -> str:
-        output = ""
-        elements = s.select('.article-description-pov-text,.article-description,.article-headline,.paragraph,h3,h1,h2')
-        if elements is not None:
-            for e in elements:
-                output += e.get_text() + "\n"
-        return output
+        s = s.select_one('.article-content')
+        if s is not None:
+            for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:
+                for p in s.find_all(tag):
+                    p.insert_after(NavigableString('\n\n'))
+            return s.get_text()
+        else:
+            return ""
 
 if __name__ == '__main__':
     c = IlHtmlToText()
