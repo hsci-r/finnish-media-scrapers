@@ -53,7 +53,7 @@ def main():
         with open(args.input) as inf:
             cr = csv.DictReader(inf)
             for a in cr:
-                file = os.path.join(args.output,"art-"+str(a['id'])+".html")
+                file = os.path.join(args.output,str(a['id'])+".html")
                 if not os.path.exists(file):
                     url = a['url']
                     driver.get(url)
