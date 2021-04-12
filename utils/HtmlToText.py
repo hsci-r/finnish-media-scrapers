@@ -24,9 +24,9 @@ class HtmlToText(ABC):
         os.makedirs(args.output_directory,exist_ok=True)
         for ig in args.input:
             if os.path.isdir(ig):
-                iglob = os.path.join(args.input,"*.html")
+                iglob = os.path.join(ig,"*.html")
             else:
-                iglob = args.input
+                iglob = ig 
             for ifile in glob.glob(iglob):
                 ofile = os.path.join(args.output_directory,Path(ifile).name).replace(".html",".txt")
                 with open(ifile) as inf:
