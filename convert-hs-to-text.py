@@ -5,16 +5,22 @@ import re
 
 class HsHtmlToText(HtmlToText):
     def extract(self, s: BeautifulSoup) -> str:
-        e = s.find('main')
-        if e is not None:
-            s = e
-        e = s.select_one('div#page-main-content + article')
+        e = s.select_one('#__nuxt,article.article--xxl')
         if e is not None:
             s = e
         else:
-            e = s.select_one('div#page-main-content')
+            e = s.find('main')
             if e is not None:
                 s = e
+            e = s.select_one('div#page-main-content + article')
+            if e is not None:
+                s = e
+            else:
+                e = s.select_one('div#page-main-content,#paid-content')
+                if e is not None:
+                    s = e
+                else:
+                    return ""
         for e in s.find_all('aside'):
             e.extract()
         for e in s.select('section.article-body + div'):
