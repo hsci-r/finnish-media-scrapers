@@ -16,7 +16,7 @@ def parse_arguments():
     parser.add_argument('-i','--input',help="input CSV file containing articles to post-filter (from query-il.py, query-is.py or query-yle.py)",required=True)
     parser.add_argument('-t','--txt',help="directory containing the plain texts extracted from the articles",required=True)
     parser.add_argument('-o','--output',help="output CSV the contents of which will be the input CSV with a column added for the post-filtering result",required=True)
-    parser.add_argument('-q','--query-strings',help="query strings to search for",nargs="*",required=True)
+    parser.add_argument('-q','--query-strings',help="query strings to search for",nargs="+")
     parser.add_argument('-ci','--case-insensitive',default=False,action='store_true',help="compare without regard to upper or lower case")
     parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")    
     return parser.parse_args()
