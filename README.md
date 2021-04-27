@@ -38,6 +38,10 @@ example: `python query-il.py -f 2020-02-16 -t 2020-02-18 -o il-sdp.csv -q SDP` +
 
 example: `python query-is.py -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` + `python fetch-open.py -i is-sdp.csv -o is-sdp` + `python3 convert-is-to-text.py -o is-sdp-output is-sdp`
 
+## Example: Members of Parliament
+
+Scripts and instructions n the folder [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament)
+
 ## Contact
 
 For more information on the scrapers, please contact associate professor [Eetu Mäkelä](http://iki.fi/eetu.makela).
