@@ -3,9 +3,9 @@
 [![DOI](https://zenodo.org/badge/335605978.svg)](https://zenodo.org/badge/latestdoi/335605978)
 
 
-Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/). The scrapers support specifying a keyword as well as a timespan for extraction, and support either getting a CSV of all matching articles with links, or of also downloading the articles in HTML format.
+Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/). The scrapers support specifying a keyword as well as a timespan for extraction, and output a CSV of all matching articles with links. A second set of scripts then allows downloading the matched articles in HTML format. Finally, there are further scripts for extracting plain text versions of the article texts out of the HTML, as well as a script to post-filter the resulting plain texts again with keywords. This is important due to the fact that all the sources use some kind of stemming for their search, which means that they can often return also spurious hits. Further, if searching for multiple words, the engines often perform a search for either word instead of the complete phrase, again necessitating post-filtering. At the same time and equally importantly, the stemming for a particular media may not cover e.g. all inflectional forms of words. Thus, it often makes sense to query for at least all common inflected variants and merge the results. For a complete worked up example of use, see the [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament) folder, which demonstrates how one can collect and count how many articles in each media mention the members of the Finnish Parliament.
 
-Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources.
+Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources. 
 
 ## Installation
 
@@ -37,10 +37,6 @@ example: `python query-il.py -f 2020-02-16 -t 2020-02-18 -o il-sdp.csv -q SDP` +
 ## Iltasanomat
 
 example: `python query-is.py -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` + `python fetch-open.py -i is-sdp.csv -o is-sdp` + `python3 convert-is-to-text.py -o is-sdp-output is-sdp`
-
-## Example: Collecting articles about Finnish Members of Parliament
-
-Scripts and instructions in the folder [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament)
 
 ## Contact
 
