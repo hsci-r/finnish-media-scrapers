@@ -40,7 +40,7 @@ example: `python query-is.py -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` +
 
 ## Example: Members of Parliament
 
-Scripts and instructions n the folder [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament)
+Scripts and instructions in the folder [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament)
 
 ## Contact
 
