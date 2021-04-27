@@ -15,7 +15,7 @@ The easiest way to install the required dependencies for these scripts is throug
 
 First, query the articles you want using `query-hs.py`. For example, `python query-hs.py -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
 
-For downloading articles, this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script. After these prequisites are fulfilled, you can fetch the articles using `fetch-hs.py`. For example `python fetch-hs.py -i hs-sdp.csv -o hs-sdp`.
+For downloading articles, this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script. After these prequisites are fulfilled, you can fetch the articles using `fetch-hs.py`. For example `python fetch-hs.py -i hs-sdp.csv -o hs-sdp`. After fetching the articles, extract texts with `python3 convert-hs-to-text.py -o hs-sdp-output hs-sdp`
 
 Known special considerations:
 
@@ -28,15 +28,15 @@ Known special considerations:
 
 - A single query can return at most 10,000 hits. This can be sidestepped by invoking the script multiple times with smaller query time spans.
 
-example: `python query-yle.py -f 2020-02-16 -t 2020-02-18 -o yle-sdp.csv -q SDP` + `python fetch-open.py -i yle-sdp.csv -o yle-sdp`
+example: `python query-yle.py -f 2020-02-16 -t 2020-02-18 -o yle-sdp.csv -q SDP` + `python fetch-open.py -i yle-sdp.csv -o yle-sdp` + `python3 convert-yle-to-text.py -o yle-sdp-output yle-sdp` 
 
 ## Iltalehti
 
-example: `python query-il.py -f 2020-02-16 -t 2020-02-18 -o il-sdp.csv -q SDP` + `python fetch-open.py -i il-sdp.csv -o il-sdp`
+example: `python query-il.py -f 2020-02-16 -t 2020-02-18 -o il-sdp.csv -q SDP` + `python fetch-open.py -i il-sdp.csv -o il-sdp` + `python3 convert-il-to-text.py -o il-sdp-output il-sdp`
 
 ## Iltasanomat
 
-example: `python query-is.py -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` + `python fetch-open.py -i is-sdp.csv -o is-sdp`
+example: `python query-is.py -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` + `python fetch-open.py -i is-sdp.csv -o is-sdp` + `python3 convert-is-to-text.py -o is-sdp-output is-sdp`
 
 ## Contact
 
