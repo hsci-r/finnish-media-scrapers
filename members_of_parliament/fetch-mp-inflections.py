@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import argparse
 
-df = pd.read_csv("kedustajat-expanded.csv")
+df = pd.read_csv("mp-expanded.csv")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-u','--username',help="email to use for article fetching")
@@ -28,20 +28,20 @@ for i in range(0, len(names)):
     
     #IL
    
-    filename = 'kansanedustaja_data/queries/il-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-open.py -i ' + filename + ' -o kansanedustaja_data/articles/il-' + original_name_without_spaces)
+    filename = 'queries/il-inflections-'+ name_without_spaces + ".csv"
+    os.system('python fetch-open.py -i ' + filename + ' -o articles/il-' + original_name_without_spaces)
     
     # IS
-    filename = 'kansanedustaja_data/queries/is-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-open.py -i ' + filename + ' -o kansanedustaja_data/articles/is-' + original_name_without_spaces)
+    filename = 'queries/is-inflections-'+ name_without_spaces + ".csv"
+    os.system('python fetch-open.py -i ' + filename + ' -o articles/is-' + original_name_without_spaces)
     
     # YLE
-    filename = 'kansanedustaja_data/queries/yle-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-open.py -i ' + filename + ' -o kansanedustaja_data/articles/yle-' + original_name_without_spaces)
+    filename = 'queries/yle-inflections-'+ name_without_spaces + ".csv"
+    os.system('python fetch-open.py -i ' + filename + ' -o articles/yle-' + original_name_without_spaces)
     
      # HS
-    filename = 'kansanedustaja_data/queries/hs-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-hs.py -i ' + filename + ' -o kansanedustaja_data/articles/hs-' + original_name_without_spaces + " -u " + args.username + " -p " + args.password)
+    filename = 'queries/hs-inflections-'+ name_without_spaces + ".csv"
+    os.system('python fetch-hs.py -i ' + filename + ' -o articles/hs-' + original_name_without_spaces + " -u " + args.username + " -p " + args.password)
     
     
     
