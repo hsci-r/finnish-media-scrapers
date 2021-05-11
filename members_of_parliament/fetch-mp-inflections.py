@@ -10,9 +10,9 @@ parser.add_argument('-p','--password',help="password to use for article fetching
 args = parser.parse_args()
 
 names = []
-firstnames = list(df['First name'])
-lastnames = list(df['Expanded last name'])
-lastnames_original = list(df['Last name'])
+firstnames = list(df['first_name'])
+lastnames = list(df['expanded_last_name'])
+lastnames_original = list(df['last_name'])
 
 names_original = []
 
@@ -28,20 +28,20 @@ for i in range(0, len(names)):
     
     #IL
    
-    filename = 'queries/il-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-open.py -i ' + filename + ' -o articles/il-' + original_name_without_spaces)
+    filename = '../queries/il-inflections-'+ name_without_spaces + ".csv"
+    os.system('python ../fetch-open.py -i ' + filename + ' -o ../articles/il-' + original_name_without_spaces)
     
     # IS
-    filename = 'queries/is-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-open.py -i ' + filename + ' -o articles/is-' + original_name_without_spaces)
+    filename = '../queries/is-inflections-'+ name_without_spaces + ".csv"
+    os.system('python ../fetch-open.py -i ' + filename + ' -o ../articles/is-' + original_name_without_spaces)
     
     # YLE
-    filename = 'queries/yle-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-open.py -i ' + filename + ' -o articles/yle-' + original_name_without_spaces)
+    filename = '../queries/yle-inflections-'+ name_without_spaces + ".csv"
+    os.system('python ../fetch-open.py -i ' + filename + ' -o ../articles/yle-' + original_name_without_spaces)
     
      # HS
-    filename = 'queries/hs-inflections-'+ name_without_spaces + ".csv"
-    os.system('python fetch-hs.py -i ' + filename + ' -o articles/hs-' + original_name_without_spaces + " -u " + args.username + " -p " + args.password)
+    filename = '../queries/hs-inflections-'+ name_without_spaces + ".csv"
+    os.system('python ../fetch-hs.py -i ' + filename + ' -o ../articles/hs-' + original_name_without_spaces + " -u " + args.username + " -p " + args.password)
     
     
     
