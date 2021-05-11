@@ -24,6 +24,7 @@ def parse_arguments():
   parser.add_argument('-o','--output',help="output CSV file",required=True)
   parser.add_argument('-a','--articles',help="directory to fetch articles into (optional)")
   parser.add_argument('-l','--limit',help="number of articles to fetch per query (max==10000)",default=10000,type=int)
+  parser.add_argument('-lang','--language',help="language to search (fi=YLE uutiset,sv=Svenska YLE)",default="fi")
   parser.add_argument('-d','--delay',help="number of seconds to wait between consecutive requests",default=1.0,type=float)
   parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")
   return(parser.parse_args())
@@ -41,8 +42,8 @@ def main():
         'app_id':'hakuylefi_v2_prod',
         'app_key':'4c1422b466ee676e03c4ba9866c0921f',
         'service':'uutiset',
-        'language':'fi',
-        'uiLanguage':'fi',
+        'language': args.language,
+        'uiLanguage': args.language,
         'type':'article',
         'time':'custom',
         'timeFrom':args.from_date,
