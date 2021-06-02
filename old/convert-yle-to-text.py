@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup,NavigableString
 from utils.HtmlToText import HtmlToText
-import logging
 
 class YleHtmlToText(HtmlToText):
-    def extract(self, s: BeautifulSoup) -> str:
+    def _extract(self, s: BeautifulSoup) -> str:
         e = s.select_one('.yle__article')
         if e is None:
             e = s.select_one('#yle__section--article')

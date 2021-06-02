@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup,NavigableString
 from utils.HtmlToText import HtmlToText
 
 class IlHtmlToText(HtmlToText):
-    def extract(self, s: BeautifulSoup) -> str:
+    def _extract(self, s: BeautifulSoup) -> str:
         s = s.select_one('.article-content')
         if s is not None:
             for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:

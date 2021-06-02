@@ -2,24 +2,28 @@
 
 [![DOI](https://zenodo.org/badge/335605978.svg)](https://zenodo.org/badge/latestdoi/335605978)
 
-
-Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/). 
+Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/).
 
 The general workflow for using the scapers is as follows:
- 1. The scrapers support specifying a keyword as well as a timespan for extraction, and output a CSV of all matching articles with links. 
- 2. A second set of scripts then allows downloading the matched articles in HTML format. 
- 3. Third, there are further scripts for extracting plain text versions of the article texts out of the HTML.
- 4. Finally, a script exists to post-filter the resulting plain texts again with keywords. 
+
+1.  The scrapers support specifying a keyword as well as a timespan for extraction, and output a CSV of all matching articles with links.
+2.  A second set of scripts then allows downloading the matched articles in HTML format.
+3.  Third, there are further scripts for extracting plain text versions of the article texts out of the HTML.
+4.  Finally, a script exists to post-filter the resulting plain texts again with keywords.
 
 Important to know when applying the workflow is that due to the fact that all the sources use some kind of stemming for their search, they can often return also spurious hits. Further, if searching for multiple words, the engines often perform a search for either word instead of the complete phrase. The post-filtering script above exists to counteract this by allowing the refiltering of the results more rigorously and uniformly locally.
 
 At the same time and equally importantly, the stemming for a particular media may not cover e.g. all inflectional forms of words. Thus, it often makes sense to query for at least all common inflected variants and merge the results. For a complete worked up example of this kind of use, see the [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament) folder, which demonstrates how one can collect and count how many articles in each media mention the members of the Finnish Parliament.
 
-Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources. 
+Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources.
 
 ## Installation
 
-The easiest way to install the required dependencies for these scripts is through Conda. This can be done by running e.g. `conda env create -f environment.yml --prefix venv` and then `conda activate ./venv`.
+There are two ways to get the scripts to work.
+
+The first one is to install the scrapers as a package with pip (`python -m pip install git+https://github.com/hsci-r/finnish-media-scrapers.git`). If installed this way, the scripts should appear as executables in your `bin`, e.g. as `query-yle`.
+
+The other is to download the repository, set up a development environment for it and run the scripts within it. The easiest way to do this is through Conda. This can be done by running e.g. `conda env create -f environment.yml --prefix venv` and then `conda activate ./venv`. If running the scripts this way without installing them, you need to call them directly by their package names, e.g. `python -m finnish_media_scrapers.scripts.query_yle`.
 
 ## Helsingin Sanomat
 
@@ -38,7 +42,7 @@ Known special considerations:
 
 - A single query can return at most 10,000 hits. This can be sidestepped by invoking the script multiple times with smaller query time spans.
 
-example: `python query-yle.py -f 2020-02-16 -t 2020-02-18 -o yle-sdp.csv -q SDP` + `python fetch-open.py -i yle-sdp.csv -o yle-sdp` + `python3 convert-yle-to-text.py -o yle-sdp-output yle-sdp` 
+example: `python query-yle.py -f 2020-02-16 -t 2020-02-18 -o yle-sdp.csv -q SDP` + `python fetch-open.py -i yle-sdp.csv -o yle-sdp` + `python3 convert-yle-to-text.py -o yle-sdp-output yle-sdp`
 
 ## Iltalehti
 

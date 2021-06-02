@@ -2,10 +2,9 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup,NavigableString
 from utils.HtmlToText import HtmlToText
-import logging
 
 class SvenskaYleHtmlToText(HtmlToText):
-    def extract(self, s: BeautifulSoup) -> str:
+    def _extract(self, s: BeautifulSoup) -> str:
         e = s.select_one('article#main-content')
         if e is not None:
             for r in s.select('aside#id-article__tags'):

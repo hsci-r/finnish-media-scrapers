@@ -4,7 +4,7 @@ from utils.HtmlToText import HtmlToText
 import re
 
 class HsHtmlToText(HtmlToText):
-    def extract(self, s: BeautifulSoup) -> str:
+    def _extract(self, s: BeautifulSoup) -> str:
         e = s.select_one('#__nuxt,article.article--xxl')
         if e is not None:
             s = e

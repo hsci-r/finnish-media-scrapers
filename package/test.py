@@ -1,1 +1,0 @@
-from finnishmediascrapers import simple
