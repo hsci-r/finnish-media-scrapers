@@ -79,7 +79,7 @@ def query_yle(query:str, language: str, from_date: str, to_date: str, batch_size
             raise ValueError(f"Got empty response for {response.url}")
         if len(r['data'])==0: # Got 0 results, assuming we're done.
             break
-        articles = [ Article(a['id'],a['url']['full'],a['headline'],a['datePublished']) for a in r['data']]
+        articles = [ Article(id=a['id'],url=a['url']['full'],title=a['headline'],date_modified=a['datePublished']) for a in r['data'] ]
         yield Result(articles,response.url,r['meta']['count'])
         params['offset']+=batch_size
         if params['offset']>r['meta']['count']: # Got all results from the API.")
@@ -123,7 +123,79 @@ def query_is(query: str, from_date: str, to_date: str, batch_size: int = 100) ->
             raise ValueError(f"Got empty response for {response.url}")
         if len(r)==0: # Got 0 results, assuming we're done.
             break
-        articles = [ Article(a['id'],'https://www.is.fi'+a['href'],a['title'],a['displayDate']) for a in r]
+        articles = [ Article(id=a['id'],url='https://www.is.fi'+a['href'],title=a['title'],date_modified=a['displayDate']) for a in r ]
         yield Result(articles,response.url,-1)
         offset += batch_size
         response = requests.get(_build_is_url(query,offset,batch_size,date_start,date_end))
+
+il_api: str = "https://api.il.fi/v1/articles/search"
+
+def query_il(query: str, from_date: str, to_date: str, batch_size: int = 200) -> Iterator[Result]:
+    """Query the IL API for articles matching a query
+
+    Args:
+        query (str): the query string to search for
+        from_date (str): date to search from (inclusive, YYYY-MM-DD)
+        to_date (str): date to search to (inclusive, YYYY-MM-DD)
+        batch_size (int, optional): How many entries to query for in a single API call.  Maximum and default for the IL API is 200.
+
+    Raises:
+        ValueError: when something goes wrong in the API call
+
+    Yields:
+        Iterator[Result]: each Result contains the results from a single API call    
+    """
+    params = {
+            'date_start':from_date,
+            'date_end':to_date,
+            'q':query,
+            'offset':0,
+            'limit':batch_size
+    }
+    response = requests.get(il_api,params)
+    while True:
+        if response.status_code != 200:
+            raise ValueError(f"Got unexpected response code {response.status_code} for {response.url}.")
+        r = response.json()['response'] 
+        if r is None:
+            raise ValueError(f"Got empty response for {response.url}")
+        if len(r)==0: # Got 0 results, assuming we're done.
+            break
+        articles = [ Article(
+            id=a['article_id'],
+            url='http://iltalehti.fi/'+a['category']['category_name']+"/a/"+a['article_id'],
+            title=a['title'],
+            date_modified=a['updated_at'] if a['updated_at'] is not None else a['published_at']
+            ) for a in r ]
+        yield Result(articles,response.url,-1)
+        params['offset']+=batch_size
+        response = requests.get(il_api,params)
+
+hs_api: str = "https://www.hs.fi/api/search"
+
+def query_hs(query: str, from_date: str, to_date: str, batch_size: int = 100):
+    def _build_hs_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
+        return f"{hs_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
+    date_start = int(datetime.timestamp(datetime.fromisoformat(from_date)) * 1000)
+    date_end = int(datetime.timestamp(datetime.fromisoformat(to_date) + timedelta(days=1)) * 1000)
+    response = requests.get(_build_hs_url(query,9950,50,date_start,date_end))
+    if response.status_code != 200:
+        raise ValueError(f"Got unexpected response code {response.status_code} for {response.url}.")
+    r = response.json()
+    if len(r)!=0:
+        raise ValueError("Query results in more than 9950 results. The HS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+    offset = 0
+    response = requests.get(_build_hs_url(query,offset,batch_size,date_start,date_end))
+    while True:
+        if response.status_code != 200:
+            raise ValueError(f"Got unexpected response code {response.status_code} for {response.url}.")
+        r = response.json()
+        if r is None:
+            raise ValueError(f"Got empty response for {response.url}")
+        if len(r)==0: # Got 0 results, assuming we're done.
+            break
+        articles = [ Article(id=a['id'],url='https://www.hs.fi'+a['href'],title=a['title'],date_modified=a['displayDate']) for a in r ]
+        yield Result(articles,response.url,-1)
+        offset += batch_size
+        response = requests.get(_build_hs_url(query,offset,batch_size,date_start,date_end))
+    
