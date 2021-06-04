@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# %%
-
 import os
 import requests
 import logging
@@ -10,12 +8,11 @@ import random
 from time import sleep
 
 logging.basicConfig(level=logging.INFO)
-# %%
 
 import argparse
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i','--input',help="input CSV file containing articles to fetch (from query-il.py, query-is.py or query-yle.py)",required=True)
+    parser.add_argument('-i','--input',help="input CSV file containing articles to fetch (from query-il, query-is or query-yle)",required=True)
     parser.add_argument('-o','--output',help="directory to fetch articles into",required=True)
     parser.add_argument('-d','--delay',help="number of seconds to wait between consecutive requests",default=1.0,type=float)
     parser.add_argument('--quiet', default=False, action='store_true', help="Log only errors")    
