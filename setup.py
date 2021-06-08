@@ -4,9 +4,9 @@ with open('README.md') as fp:
     README = fp.read()
 
 setup(
-    name='finnish-media-scrapers',
+    name='finnish_media_scrapers',
     version='0.1.0',
-    author='Human Sciences - Computing Interaction Research GRoup',
+    author='Human Sciences - Computing Interaction Research Group',
     author_email='eetu.makela@helsinki.fi',
     description='Scrapers for extracting articles from Finnish journalistic media websites.',
     long_description=README,
