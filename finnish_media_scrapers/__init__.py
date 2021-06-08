@@ -1,2 +1,2 @@
 
-__all__ = ['finnish-media-scrapers']
+__all__ = ['finnish_media_scrapers']
