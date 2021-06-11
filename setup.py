@@ -12,7 +12,7 @@ setup(
     long_description=README,
     long_description_content_type='text/markdown',
     packages=find_packages('.', exclude=['tests', 'tests.*']),
-    package_dir={'': '.'},
+    package_dir={'': 'src'},
     test_suite='tests',
     install_requires=['lxml','requests','beautifulsoup4','selenium'],
     entry_points={
