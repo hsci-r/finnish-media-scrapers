@@ -14,7 +14,7 @@ setup(
     packages=find_packages('.', exclude=['tests', 'tests.*']),
     package_dir={'': 'src'},
     test_suite='tests',
-    install_requires=['lxml','requests','beautifulsoup4','selenium'],
+    install_requires=['urllib3==1.25.9', 'lxml','requests','beautifulsoup4','selenium'],
     entry_points={
         'console_scripts' : [
             'fms-query-yle = finnish_media_scrapers.scripts.query_yle:main',
