@@ -31,7 +31,7 @@ Apart from using the scripts, the functionality of the pacakge is also provided 
 
 First, query the articles you want using `fms-query-hs`. For example, `fms-query-hs -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
 
-For downloading articles, this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script. After these prequisites are fulfilled, you can fetch the articles using `fms-query-hs`. For example `fms-query-hs -i hs-sdp.csv -o hs-sdp`. After fetching the articles, extract texts with `fms-html-to-text-hs -o hs-sdp-output hs-sdp`.
+For downloading articles, this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script. After these prequisites are fulfilled, you can fetch the articles using `fms-fetch-hs`. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp`. After fetching the articles, extract texts with `fms-html-to-text-hs -o hs-sdp-output hs-sdp`.
 
 Known special considerations:
 
