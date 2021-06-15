@@ -25,9 +25,9 @@ The first one is to install the scrapers as a package with pip (`python3 setup.p
 
 The other is to download the repository, set up a development environment for it and run the scripts within it. The easiest way to do this is through Conda. This can be done by running e.g. `conda env create -f environment.yml --prefix venv` and then `conda activate ./venv`. If running the scripts this way without installing them, you need to call them directly by their package names, e.g. `python -m finnish_media_scrapers.scripts.query_yle`.
 
-Apart from using the scripts, the functionality of the pacakge is also provided as a python module that you may use programmatically from within Python. For the functionalities thus provided, see under [finnish_media_scrapers](finnish_media_scrapers/).
+Apart from using the scripts, the functionality of the package is also provided as a python module that you may use programmatically from within Python. For the functionalities thus provided, see under [finnish_media_scrapers](finnish_media_scrapers/).
 
-![Data collection workflow with using pip-packet](images/fms_datacollection.png)
+![Data collection workflow with using pip-packet](images/fms_datacollection_white.png)
 
 ## Helsingin Sanomat
 
