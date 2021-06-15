@@ -27,7 +27,7 @@ The other is to download the repository, set up a development environment for it
 
 Apart from using the scripts, the functionality of the package is also provided as a python module that you may use programmatically from within Python. For the functionalities thus provided, see under [finnish_media_scrapers](finnish_media_scrapers/).
 
-![Data collection workflow with using pip-packet](images/fms_datacollection_white.png)
+![Data collection workflow with using pip-packet](images/fms_datacollection_50border.png)
 
 ## Helsingin Sanomat
 
