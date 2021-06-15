@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from ..query import query_is
+from ..query import query_hs
 import logging
 from datetime import datetime,timedelta
 import argparse
