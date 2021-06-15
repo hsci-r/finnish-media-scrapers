@@ -14,9 +14,14 @@ def prepare_session_hs(driver: Union[webdriver.Remote,webdriver.Firefox,webdrive
         password (str): the password to use for logging in
     """
     driver.get("https://www.hs.fi")
-    login = driver.find_element_by_xpath("//*[contains(text(), 'Kirjaudu')]")
+    cookies_frame = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//iframe[@title='SP Consent Message']"))
+    driver.switch_to.frame(cookies_frame)
+    ok_button = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//button[@title='OK']"))
+    ok_button.click()
+    driver.switch_to.default_content()
+    login = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//*[contains(text(), 'Kirjaudu')]"))
     driver.execute_script("arguments[0].click();", login)
-    user = driver.find_element_by_id("username")
+    user = WebDriverWait(driver,30).until(lambda d: d.find_element_by_id("username"))
     user.send_keys(username)
     pas = driver.find_element_by_id("password")
     pas.send_keys(password),
