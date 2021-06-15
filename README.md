@@ -4,17 +4,6 @@
 
 Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/).
 
-The general workflow for using the scrapers is as follows:
-
-1.  The scrapers support specifying a keyword as well as a timespan for extraction, and output a CSV of all matching articles with links.
-2.  A second set of scripts then allows downloading the matched articles in HTML format.
-3.  Third, there are further scripts for extracting plain text versions of the article texts out of the HTML.
-4.  Finally, a script exists to post-filter the resulting plain texts again with keywords.
-
-Important to know when applying the workflow is that due to the fact that all the sources use some kind of stemming for their search, they can often return also spurious hits. Further, if searching for multiple words, the engines often perform a search for either word instead of the complete phrase. The post-filtering script above exists to counteract this by allowing the refiltering of the results more rigorously and uniformly locally.
-
-At the same time and equally importantly, the stemming for a particular media may not cover e.g. all inflectional forms of words. Thus, it often makes sense to query for at least all common inflected variants and merge the results. For a complete worked up example of this kind of use, see the [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament) folder, which demonstrates how one can collect and count how many articles in each media mention the members of the Finnish Parliament.
-
 Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources.
 
 ## Installation
@@ -27,7 +16,20 @@ The other is to download the repository, set up a development environment for it
 
 Apart from using the scripts, the functionality of the package is also provided as a python module that you may use programmatically from within Python. For the functionalities thus provided, see under [finnish_media_scrapers](finnish_media_scrapers/).
 
+## General workflow
+
 ![Data collection workflow with using pip-packet](images/fms_datacollection_50border.png)
+
+The general workflow for using the scrapers is as follows:
+
+1.  The scrapers support specifying a keyword as well as a timespan for extraction, and output a CSV of all matching articles with links.
+2.  A second set of scripts then allows downloading the matched articles in HTML format.
+3.  Third, there are further scripts for extracting plain text versions of the article texts out of the HTML.
+4.  Finally, a script exists to post-filter the resulting plain texts again with keywords.
+
+Important to know when applying the workflow is that due to the fact that all the sources use some kind of stemming for their search, they can often return also spurious hits. Further, if searching for multiple words, the engines often perform a search for either word instead of the complete phrase. The post-filtering script above exists to counteract this by allowing the refiltering of the results more rigorously and uniformly locally.
+
+At the same time and equally importantly, the stemming for a particular media may not cover e.g. all inflectional forms of words. Thus, it often makes sense to query for at least all common inflected variants and merge the results. For a complete worked up example of this kind of use, see the [members_of_parliament](https://github.com/hsci-r/finnish-media-scraper/tree/master/members_of_parliament) folder, which demonstrates how one can collect and count how many articles in each media mention the members of the Finnish Parliament.
 
 ## Helsingin Sanomat
 
