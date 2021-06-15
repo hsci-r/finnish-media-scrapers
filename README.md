@@ -4,7 +4,7 @@
 
 Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/).
 
-The general workflow for using the scapers is as follows:
+The general workflow for using the scrapers is as follows:
 
 1.  The scrapers support specifying a keyword as well as a timespan for extraction, and output a CSV of all matching articles with links.
 2.  A second set of scripts then allows downloading the matched articles in HTML format.
