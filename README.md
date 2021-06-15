@@ -27,6 +27,8 @@ The other is to download the repository, set up a development environment for it
 
 Apart from using the scripts, the functionality of the pacakge is also provided as a python module that you may use programmatically from within Python. For the functionalities thus provided, see under [finnish_media_scrapers](finnish_media_scrapers/).
 
+![Data collection workflow with using pip-packet](images/fms_datacollection.png)
+
 ## Helsingin Sanomat
 
 First, query the articles you want using `fms-query-hs`. For example, `fms-query-hs -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
