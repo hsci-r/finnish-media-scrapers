@@ -8,6 +8,9 @@ from typing import Union
 def prepare_session_hs(driver: Union[webdriver.Remote,webdriver.Firefox,webdriver.Chrome,webdriver.Opera], username: str, password: str):
     """Prepare a Selenium session for scraping articles from Helsingin Sanomat by logging in using the provided user id and password.
 
+    Raises:
+        TimeoutException: if the web driver is unable to find the elements it is looking for in 30 seconds. May indicate changes to the loging page structure.
+
     Args:
         driver (Union[webdriver.Remote,webdriver.Firefox,webdriver.Chrome,webdriver.Opera]): the Selenium session to use
         username (str): the username to log in as
