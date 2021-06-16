@@ -11,7 +11,7 @@ setup(
     description='Scrapers for extracting articles from Finnish journalistic media websites.',
     long_description=README,
     long_description_content_type='text/markdown',
-    packages=find_packages('.', exclude=['tests', 'tests.*']),
+    packages=['finnish_media_scrapers'],
     package_dir={'': '.'},
     test_suite='tests',
     install_requires=['urllib3', 'lxml','requests==2.25.1','beautifulsoup4','selenium'],
