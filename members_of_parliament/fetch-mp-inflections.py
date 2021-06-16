@@ -29,19 +29,19 @@ for i in range(0, len(names)):
     #IL
    
     filename = '../queries/il-inflections-'+ name_without_spaces + ".csv"
-    os.system('python ../fetch-open.py -i ' + filename + ' -o ../articles/il-' + original_name_without_spaces)
+    os.system('fms-fetch-open -i ' + filename + ' -o ../articles/il-' + original_name_without_spaces)
     
     # IS
     filename = '../queries/is-inflections-'+ name_without_spaces + ".csv"
-    os.system('python ../fetch-open.py -i ' + filename + ' -o ../articles/is-' + original_name_without_spaces)
+    os.system('fms-fetch-open -i ' + filename + ' -o ../articles/is-' + original_name_without_spaces)
     
     # YLE
     filename = '../queries/yle-inflections-'+ name_without_spaces + ".csv"
-    os.system('python ../fetch-open.py -i ' + filename + ' -o ../articles/yle-' + original_name_without_spaces)
+    os.system('fms-fetch-open -i ' + filename + ' -o ../articles/yle-' + original_name_without_spaces)
     
      # HS
     filename = '../queries/hs-inflections-'+ name_without_spaces + ".csv"
-    os.system('python ../fetch-hs.py -i ' + filename + ' -o ../articles/hs-' + original_name_without_spaces + " -u " + args.username + " -p " + args.password)
+    os.system('fms-fetch-hs -i ' + filename + ' -o ../articles/hs-' + original_name_without_spaces + " -u " + args.username + " -p " + args.password)
     
     
     

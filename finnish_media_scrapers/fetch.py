@@ -8,15 +8,23 @@ from typing import Union
 def prepare_session_hs(driver: Union[webdriver.Remote,webdriver.Firefox,webdriver.Chrome,webdriver.Opera], username: str, password: str):
     """Prepare a Selenium session for scraping articles from Helsingin Sanomat by logging in using the provided user id and password.
 
+    Raises:
+        TimeoutException: if the web driver is unable to find the elements it is looking for in 30 seconds. May indicate changes to the loging page structure.
+
     Args:
         driver (Union[webdriver.Remote,webdriver.Firefox,webdriver.Chrome,webdriver.Opera]): the Selenium session to use
         username (str): the username to log in as
         password (str): the password to use for logging in
     """
     driver.get("https://www.hs.fi")
-    login = driver.find_element_by_xpath("//*[contains(text(), 'Kirjaudu')]")
+    cookies_frame = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//iframe[@title='SP Consent Message']"))
+    driver.switch_to.frame(cookies_frame)
+    ok_button = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//button[@title='OK']"))
+    ok_button.click()
+    driver.switch_to.default_content()
+    login = WebDriverWait(driver,30).until(lambda d: d.find_element_by_xpath("//*[contains(text(), 'Kirjaudu')]"))
     driver.execute_script("arguments[0].click();", login)
-    user = driver.find_element_by_id("username")
+    user = WebDriverWait(driver,30).until(lambda d: d.find_element_by_id("username"))
     user.send_keys(username)
     pas = driver.find_element_by_id("password")
     pas.send_keys(password),

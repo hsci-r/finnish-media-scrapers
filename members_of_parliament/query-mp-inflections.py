@@ -15,13 +15,13 @@ for name in names:
     name_replaced = name.replace(" ", "")
     
     if not os.path.isfile('../queries/il-inflections-' + name_replaced + ".csv"):
-        os.system('python ../query-il.py -f 2020-01-01 -t 2020-12-31 -o ../queries/il-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
+        os.system('fms-query-il -f 2020-01-01 -t 2020-12-31 -o ../queries/il-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
     
     if not os.path.isfile('../queries/is-inflections-' + name_replaced + ".csv"):
-        os.system('python ../query-is.py -f 2020-01-01 -t 2020-12-31 -o ../queries/is-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
+        os.system('fms-query-is -f 2020-01-01 -t 2020-12-31 -o ../queries/is-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
     
     if not os.path.isfile('../queries/yle-inflections-' + name_replaced + ".csv"):
-        os.system('python ../query-yle.py -f 2020-01-01 -t 2020-12-31 -o ../queries/yle-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
+        os.system('fms-query-yle -f 2020-01-01 -t 2020-12-31 -o ../queries/yle-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
     
     if not os.path.isfile('../queries/hs-inflections-' + name_replaced + ".csv"):
-        os.system('python ../query-hs.py -f 2020-01-01 -t 2020-12-31 -o ../queries/hs-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')
+        os.system('fms-query-hs -f 2020-01-01 -t 2020-12-31 -o ../queries/hs-inflections-'+ name_replaced + '.csv' + '  -q ' + '"' + name + '"')

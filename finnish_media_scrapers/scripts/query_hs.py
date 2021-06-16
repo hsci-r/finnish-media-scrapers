@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from ..query import query_is
+from ..query import query_hs
 import logging
 from datetime import datetime,timedelta
 import argparse
@@ -30,7 +30,7 @@ def main():
         co = csv.writer(of)
         co.writerow(['id','url','title','date_modified'])
         total_count = 0
-        for response in query_is(args.query,args.from_date,args.to_date,args.limit):
+        for response in query_hs(args.query,args.from_date,args.to_date,args.limit):
             total_count += len(response.articles)
             logging.info(f"Processing {len(response.articles)} articles from {response.url}. In total fetched {total_count} articles.")
             for article in response.articles:
