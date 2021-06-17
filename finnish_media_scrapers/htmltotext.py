@@ -1,8 +1,10 @@
-from bs4 import BeautifulSoup,NavigableString
 import re
-from typing import Union, TextIO
+from typing import TextIO, Union
 
-def extract_text_from_svyle_html(html: Union[str,TextIO]) -> str:
+from bs4 import BeautifulSoup, NavigableString
+
+
+def extract_text_from_svyle_html(html: Union[str, TextIO]) -> str:
     """Extract article text from Svenska YLE article HTML
 
     Args:
@@ -14,26 +16,27 @@ def extract_text_from_svyle_html(html: Union[str,TextIO]) -> str:
     Returns:
         str: article text
     """
-    s = BeautifulSoup(html,'lxml')
-    e = s.select_one('article#main-content')
-    if e is None:
+    soup = BeautifulSoup(html, 'lxml')
+    elem = soup.select_one('article#main-content')
+    if elem is None:
         raise ValueError("Article layout not recognized")
-    for r in s.select('aside#id-article__tags'):
-        r.extract()
-    for r in s.select('#comments'):
-        r.extract()
-    for r in s.select('.ydd-share-buttons'):
-        r.extract()
+    for elem_to_remove in soup.select('aside#id-article__tags'):
+        elem_to_remove.extract()
+    for elem_to_remove in soup.select('#comments'):
+        elem_to_remove.extract()
+    for elem_to_remove in soup.select('.ydd-share-buttons'):
+        elem_to_remove.extract()
 
-    for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:
-        for p in e.find_all(tag):
-            p.insert_after(NavigableString('\n\n'))
-    txt= e.get_text().strip()
+    for tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'p', 'div']:
+        for block_elem in elem.find_all(tag):
+            block_elem.insert_after(NavigableString('\n\n'))
+    txt = elem.get_text().strip()
     if txt == "":
         raise ValueError("Parsing results in an empty article")
-    return(txt)
+    return txt
 
-def extract_text_from_yle_html(html: Union[str,TextIO]) -> str:
+
+def extract_text_from_yle_html(html: Union[str, TextIO]) -> str:
     """Extract article text from YLE article HTML
 
     Args:
@@ -45,23 +48,24 @@ def extract_text_from_yle_html(html: Union[str,TextIO]) -> str:
     Returns:
         str: article text
     """
-    s = BeautifulSoup(html,'lxml')
-    e = s.select_one('.yle__article')
-    if e is None:
-        e = s.select_one('#yle__section--article')
-    if e is None:
-        e = s.select_one('article.content')
-    if e is None:
+    soup = BeautifulSoup(html, 'lxml')
+    elem = soup.select_one('.yle__article')
+    if elem is None:
+        elem = soup.select_one('#yle__section--article')
+    if elem is None:
+        elem = soup.select_one('article.content')
+    if elem is None:
         raise ValueError("Article layout not recognized")
-    for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:
-        for p in e.find_all(tag):
-            p.insert_after(NavigableString('\n\n'))
-    txt= e.get_text().strip()
+    for tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'p', 'div']:
+        for block_elem in elem.find_all(tag):
+            block_elem.insert_after(NavigableString('\n\n'))
+    txt = elem.get_text().strip()
     if txt == "":
         raise ValueError("Parsing results in an empty article")
-    return(txt)
+    return txt
 
-def extract_text_from_is_html(html: Union[str,TextIO]) -> str:
+
+def extract_text_from_is_html(html: Union[str, TextIO]) -> str:
     """Extract article text from Ilta-Sanomat article HTML
 
     Args:
@@ -73,19 +77,21 @@ def extract_text_from_is_html(html: Union[str,TextIO]) -> str:
     Returns:
         str: article text
     """
-    s = BeautifulSoup(html,'lxml')
-    e = s.select_one('article.single-article,article.article--m,article.article--l,article.article--xl-picture-top,article.article--xl-title-top')
-    if e is None:
+    soup = BeautifulSoup(html, 'lxml')
+    elem = soup.select_one(
+        'article.single-article,article.article--m,article.article--l,article.article--xl-picture-top,article.article--xl-title-top')
+    if elem is None:
         raise ValueError("Article layout not recognized")
-    for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:
-        for p in e.find_all(tag):
-            p.insert_after(NavigableString('\n\n'))
-    txt= e.get_text().strip()
+    for tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'p', 'div']:
+        for block_elem in elem.find_all(tag):
+            block_elem.insert_after(NavigableString('\n\n'))
+    txt = elem.get_text().strip()
     if txt == "":
         raise ValueError("Parsing results in an empty article")
-    return(txt)
+    return txt
 
-def extract_text_from_il_html(html: Union[str,TextIO]) -> str:
+
+def extract_text_from_il_html(html: Union[str, TextIO]) -> str:
     """Extract article text from Iltalehti article HTML
 
     Args:
@@ -97,19 +103,20 @@ def extract_text_from_il_html(html: Union[str,TextIO]) -> str:
     Returns:
         str: article text
     """
-    s = BeautifulSoup(html,'lxml')
-    s = s.select_one('.article-content')
-    if s is None:
+    soup = BeautifulSoup(html, 'lxml')
+    soup = soup.select_one('.article-content')
+    if soup is None:
         raise ValueError("Article layout not recognized")
-    for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:
-        for p in s.find_all(tag):
-            p.insert_after(NavigableString('\n\n'))
-    txt = s.get_text().strip()
+    for tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'p', 'div']:
+        for block_elem in soup.find_all(tag):
+            block_elem.insert_after(NavigableString('\n\n'))
+    txt = soup.get_text().strip()
     if txt == "":
         raise ValueError("Parsing results in an empty article")
-    return(txt)
+    return txt
 
-def extract_text_from_hs_html(html: Union[str,TextIO]) -> str:
+
+def extract_text_from_hs_html(html: Union[str, TextIO]) -> str:
     """Extract article text from Helsingin Sanomat article HTML
 
     Args:
@@ -121,40 +128,40 @@ def extract_text_from_hs_html(html: Union[str,TextIO]) -> str:
     Returns:
         str: article text
     """
-    s = BeautifulSoup(html,'lxml')
-    e = s.select_one('#__nuxt,article.article--xxl')
-    if e is not None:
-        s = e
+    soup = BeautifulSoup(html, 'lxml')
+    elem = soup.select_one('#__nuxt,article.article--xxl')
+    if elem is not None:
+        soup = elem
     else:
-        e = s.find('main')
-        if e is not None:
-            s = e
-        e = s.select_one('div#page-main-content + article')
-        if e is not None:
-            s = e
+        elem = soup.find('main')
+        if elem is not None:
+            soup = elem
+        elem = soup.select_one('div#page-main-content + article')
+        if elem is not None:
+            soup = elem
         else:
-            e = s.select_one('div#page-main-content,#paid-content')
-            if e is not None:
-                s = e
+            elem = soup.select_one('div#page-main-content,#paid-content')
+            if elem is not None:
+                soup = elem
             else:
                 raise ValueError("Article layout not recognized")
-    for e in s.find_all('aside'):
-        e.extract()
-    for e in s.select('section.article-body + div'):
-        e.extract()
-    for r in s.select('div.article-info'):
-        r.extract()
-    for r in s.select('div.related-articles'):
-        r.extract()
-    for r in s.select('div.article-actions'):
-        r.extract()
-    for tag in ['h1','h2','h3','h4','h5','h6','h7','p','div']:
-        for p in s.find_all(tag):
-            p.insert_after(NavigableString('\n\n'))
-    txt = s.get_text()
+    for elem in soup.find_all('aside'):
+        elem.extract()
+    for elem in soup.select('section.article-body + div'):
+        elem.extract()
+    for elem_to_remove in soup.select('div.article-info'):
+        elem_to_remove.extract()
+    for elem_to_remove in soup.select('div.related-articles'):
+        elem_to_remove.extract()
+    for elem_to_remove in soup.select('div.article-actions'):
+        elem_to_remove.extract()
+    for tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'p', 'div']:
+        for block_elem in soup.find_all(tag):
+            block_elem.insert_after(NavigableString('\n\n'))
+    txt = soup.get_text()
     txt = txt.replace("\xad", "")
-    txt = re.sub("\n\n+","\n\n",txt)
+    txt = re.sub("\n\n+", "\n\n", txt)
     txt = txt.strip()
     if txt == "":
         raise ValueError("Parsing results in an empty article")
-    return(txt)
+    return txt

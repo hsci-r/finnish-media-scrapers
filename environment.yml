@@ -1,11 +1,13 @@
-name: MediaScraper
-#channels:
-# - conda-forge
+name: finnish_media_scrapers
+channels:
+  - conda-forge
 dependencies:
   - python=3
   - selenium
   - beautifulsoup4
   - requests
   - lxml
-# - newspaper3k
-# - scrapy
+  - autopep8
+  - pre-commit
+  - pylint
+  - pandas

@@ -1,3 +1,8 @@
 *.egg-info
 *.pyo
 *.pyc
+.history
+.vscode
+build
+dist
+venv

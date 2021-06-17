@@ -63,9 +63,9 @@ example: `fms-query-is -f 2020-02-16 -t 2020-02-18 -o is-sdp.csv -q SDP` + `fms-
 For example, after collecting texts from Helsingin Sanomat with the example above, run:
 `fms-post-filter -i hs-sdp.csv -t hs-sdp-output/ -o hs-sdp-filtered.csv -q SDP`
 
-where `-i` parameter specifies the query output file, `-t` the folder name to search extracted texts, `-o` the output filename and `-q` search word to filter. 
+where `-i` parameter specifies the query output file, `-t` the folder name to search extracted texts, `-o` the output filename and `-q` search word to filter.
 
-There is also an option `-ci` for configuring the case-insensitiveness (default false). 
+There is also an option `-ci` for configuring the case-insensitiveness (default false).
 
 ## Contact
 
