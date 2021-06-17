@@ -18,7 +18,7 @@ Apart from using the scripts, the functionality of the package is also provided 
 
 ## General workflow
 
-![Data collection workflow with using pip-packet](images/fms_datacollection_50border.png)
+![Data collection workflow with using pip-packet](https://github.com/hsci-r/finnish_media_scrapers/raw/master/images/fms_datacollection_50border.png)
 
 The general workflow for using the scrapers is as follows:
 
