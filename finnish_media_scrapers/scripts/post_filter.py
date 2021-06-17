@@ -41,6 +41,7 @@ def main():
     with open(args.input) as inf, open(args.output, 'w') as outf:
         csv_input = csv.DictReader(inf)
         csv_output = csv.DictWriter(outf, [*csv_input.fieldnames, 'matches'])
+        csv_output.writeheader()
         for article in csv_input:
             txt = Path(os.path.join(args.txt, article['id']+'.txt')).read_text()
             if args.case_insensitive:
