@@ -1,3 +1,5 @@
+"""Functions to extract article plain texts from the YLE/HS/IL/IS HTML articles
+"""
 import re
 from typing import TextIO, Union
 
