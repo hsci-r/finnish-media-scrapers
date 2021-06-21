@@ -6,14 +6,15 @@ tags:
   - Python
 authors:
   - name: Eetu Mäkelä^[corresponding author]
+    orcid: 0000-0002-8366-8414
     affiliation: 1
   - name: Pihla Toivanen^[co-first author]
     orcid: 0000-0003-0872-7098
-    affiliation: 1 # (Multiple affiliations must be quoted)
+    affiliation: 1
 affiliations:
  - name: University of Helsinki
    index: 1
-date: 25 May 2021
+date: 21 June 2021
 bibliography: paper.bib
 
 ---
@@ -21,13 +22,13 @@ bibliography: paper.bib
 # Summary
 
 Finnish Media Scrapers is a package for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/).
-Included are scrapers for four big Finnish media: newspapers [YLE](https://www.yle.fi/uutiset/) & [Helsingin Sanomat](https://www.hs.fi/), and tabloids [Iltalehti](https://www.iltalehti.fi/) & [Iltasanomat](https://www.is.fi/).
+Included are scrapers for the four biggest Finnish journalistic media: [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/).
 
 # Statement of need
 
-There is an increasing need for user-friendly computational tools in the humanities and social sciences. For example, a common workflow in media research is to collect a large amount of data and combine quantitative and qualitative methods in the analysis phase (@Koivunen, @Weber2011). This package responds to the research needs by providing easy-to-use tools for scraping Finnish media articles and extracting the texts from the scraped HTML files.
+There is an increasing need for user-friendly computational tools in the humanities and social sciences. For example, a common workflow in media research is to collect a large amount of data and combine quantitative and qualitative methods in the analysis phase (@Koivunen, @Weber2011). This package responds to the research needs by providing easy-to-use tools for scraping Finnish media articles and extracting the article texts from the scraped HTML files. At the same time, the functionality has also been packaged as a Python module for the benefit of more computationally-savvy users.
 
-The scripts have been already used in a Finnish data journalism article analyzing how Finnish members of parliament were represented in the four media the scrapers include. The article was published in the Finnish weekly news magazine Suomen Kuvalehti in May 2021 (@SKarticle), and after publishing the Finnish Media Scrapers package has gained interest from Finnish computational social science community.
+The scripts were originally developed for a data journalism article (@SKarticle) analyzing how Finnish members of parliament were represented in the media in 2020. Further developing and packaging the scripts into a reusable package was based on an expressed interest from the Finnish computational science community. Since initial beta release a couple of months ago, the package is now known to be already used in at least two research projects targeting Finnish media analysis.
 
 # General workflow
 
@@ -43,6 +44,6 @@ At the same time and equally importantly, the stemming for a particular media ma
 
 # Acknowledgements
 
-We acknowledge contributions from Suomen Kuvalehti team (Samuel Nyroos, Salla Vuorikoski and Leena Sharma) during the testing phase of the scrapers.
+We acknowledge contributions from the Suomen Kuvalehti team (Samuel Nyroos, Salla Vuorikoski and Leena Sharma) during the testing phase of the scrapers.
 
 # References
