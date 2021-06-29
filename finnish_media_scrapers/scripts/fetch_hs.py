@@ -70,7 +70,6 @@ def main():
         prepare_session_hs(driver, args.username,
                            args.password, args.max_web_driver_wait)
         logging.info("Logged in.")
-        sleep(3)
         os.makedirs(args.output, exist_ok=True)
         with open(args.input) as input_file:
             csv_input = csv.DictReader(input_file)
