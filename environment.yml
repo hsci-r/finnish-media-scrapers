@@ -1,16 +1,7 @@
-name: finnish_media_scrapers
+name: finnish-media-scrapers
 channels:
   - conda-forge
 dependencies:
   - python=3
-  - selenium
-  - beautifulsoup4
-  - requests
-  - lxml
-  - autopep8
-  - sphinx
-  - sphinx_rtd_theme
-  - pre-commit
-  - pylint
-  - pandas
+  - poetry
   - geckodriver

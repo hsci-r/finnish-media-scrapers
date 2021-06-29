@@ -9,7 +9,7 @@ Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat
 
 ## Installation
 
-Install the scripts (and Python module) using `pip install finnish-media-scrapers`. After this, the scripts should be useable from the command line, and the functionality importable from Python.
+Install the scripts (and Python module) using `pip install finnish-media-scrapers`. After this, the scripts should be useable from the command line, and the functionality importable from Python. Or, if you have [pipx](https://pypa.github.io/pipx/) and just want the command line scripts, use `pipx install finnish-media-scrapers` instead.
 
 ## General workflow
 
@@ -74,3 +74,7 @@ There is also an option `-ci` for configuring the case-insensitiveness (default 
 ## Contact
 
 For more information on the scrapers, please contact associate professor [Eetu Mäkelä](http://iki.fi/eetu.makela).
+
+## Development
+
+To set up a development environment, you need [conda](https://docs.conda.io/en/latest/) or [poetry](https://python-poetry.org/). If using conda, you can bootstrap the virtual environment with `conda env create -f requirements.yml`. This will also install poetry to the venv. Then, use poetry to install and manage the dependencies and build process (`poetry install`).
