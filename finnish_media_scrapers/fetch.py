@@ -8,6 +8,7 @@ from typing import Union
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -45,7 +46,9 @@ def prepare_session_hs(
     user.send_keys(username)
     pas = driver.find_element(By.ID, "password")
     pas.send_keys(password)
+    current_url = driver.current_url
     pas.submit()
+    WebDriverWait(driver, max_web_driver_wait).until(EC.url_changes(current_url))
 
 
 def fetch_article_hs(
