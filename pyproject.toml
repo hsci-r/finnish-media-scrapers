@@ -40,14 +40,17 @@ beautifulsoup4 = "^4.9.3"
 attrs = "^21.2.0"
 aiohttp = "^3.7.4"
 pyppeteer = "^0.2.5"
+Sphinx = {version = "^4.0.2", optional = true}
+sphinx-rtd-theme = {version = "^0.5.2", optional = true}
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.7"
-Sphinx = "^4.0.2"
-sphinx-rtd-theme = "^0.5.2"
 pre-commit = "^2.13.0"
 pylint = "^2.8.3"
 pandas = "^1.2.5"
+
+[tool.poetry.extras]
+docs = ["Sphinx","sphinx-rtd-theme"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

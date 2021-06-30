@@ -33,7 +33,6 @@ finnish\_media\_scrapers.query module
 
 .. automodule:: finnish_media_scrapers.query
    :members:
-   :undoc-members:
    :show-inheritance:
 
 Module contents
