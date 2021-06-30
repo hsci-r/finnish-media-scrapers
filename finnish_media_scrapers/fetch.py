@@ -10,7 +10,7 @@ from pyppeteer.browser import Page
 async def prepare_session_hs(
         session: Page,
         username: str, password: str, max_web_driver_wait: int = 30):
-    """Prepare a Selenium session for scraping articles from Helsingin Sanomat
+    """Prepare a pyppeteer session for scraping articles from Helsingin Sanomat
     by logging in using the provided user id and password.
 
     Raises:
@@ -45,7 +45,7 @@ async def prepare_session_hs(
 async def fetch_article_hs(
         session: Page,
         url: str, max_web_driver_wait: int = 30) -> str:
-    """Fetch the HTML of a single article using a Selenium session where
+    """Fetch the HTML of a single article using a pyppeteer session where
     prepare_session_hs has been called before.
 
     Args:
