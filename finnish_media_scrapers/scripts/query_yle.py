@@ -3,18 +3,21 @@
 """
 
 import argparse
+import asyncio
 import csv
 import logging
 import random
 from datetime import datetime
 from time import sleep
 
+import aiohttp
+
 from ..query import query_yle
 
 logging.basicConfig(level=logging.INFO)
 
 
-def parse_arguments():
+def _parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--from-date',
                         help="from date (inclusive, YYYY-MM-DD)", required=True)
@@ -35,8 +38,8 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def main():
-    args = parse_arguments()
+async def _amain():
+    args = _parse_arguments()
 
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
@@ -44,16 +47,21 @@ def main():
         csv_output = csv.writer(output_file)
         csv_output.writerow(['id', 'url', 'title', 'date_modified'])
         total_count = 0
-        for response in query_yle(args.query, args.language, args.from_date, args.to_date, args.limit):
-            total_count += len(response.articles)
-            logging.info(
-                "Processing %d articles from %s. In total fetched %d articles.",
-                len(response.articles), response.url, total_count)
-            for article in response.articles:
-                csv_output.writerow([article.id, article.url,
-                                     article.title, article.date_modified])
-            sleep(random.randrange(args.delay*2))
+        async with aiohttp.ClientSession() as session:
+            async for response in query_yle(session, args.query, args.language, args.from_date, args.to_date, args.limit):
+                total_count += len(response.articles)
+                logging.info(
+                    "Processing %d articles from %s. In total fetched %d articles.",
+                    len(response.articles), response.url, total_count)
+                for article in response.articles:
+                    csv_output.writerow([article.id, article.url,
+                                        article.title, article.date_modified])
+                sleep(random.randrange(args.delay*2))
         logging.info("Processed %s articles in total.", total_count)
+
+
+def main():
+    asyncio.run(_amain())
 
 
 if __name__ == '__main__':

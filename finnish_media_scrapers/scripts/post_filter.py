@@ -10,7 +10,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 
 
-def parse_arguments():
+def _parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-i', '--input', required=True,
@@ -32,7 +32,7 @@ def parse_arguments():
 
 
 def main():
-    args = parse_arguments()
+    args = _parse_arguments()
     query_strings = args.query_strings
     if args.case_insensitive:
         query_strings = map(query_strings, lambda l: l.lower())

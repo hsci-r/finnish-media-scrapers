@@ -1,7 +1,0 @@
-name: finnish-media-scrapers
-channels:
-  - conda-forge
-dependencies:
-  - python=3
-  - poetry
-  - geckodriver

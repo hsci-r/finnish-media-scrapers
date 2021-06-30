@@ -13,7 +13,7 @@ from ..htmltotext import extract_text_from_svyle_html
 logging.basicConfig(level=logging.INFO)
 
 
-def parse_arguments():
+def _parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--output-directory",
                         help="output directory", required=True)
@@ -22,7 +22,7 @@ def parse_arguments():
 
 
 def main():
-    args = parse_arguments()
+    args = _parse_arguments()
     os.makedirs(args.output_directory, exist_ok=True)
     for input_spec in args.input:
         if os.path.isdir(input_spec):

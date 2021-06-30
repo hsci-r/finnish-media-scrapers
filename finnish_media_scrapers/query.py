@@ -1,11 +1,13 @@
 """Functions related to querying articles from the apis of YLE, Helsingin Sanomat (HS), Ilta-Sanomat (IS) and Iltalehti (IL)
 """
 from datetime import datetime, timedelta
-from typing import Iterator
+from typing import AsyncIterable
 
-import requests
+import attr
+from aiohttp import ClientSession
 
 
+@attr.s
 class Article:
     """An article
 
@@ -15,19 +17,13 @@ class Article:
         title (str): the title or headline of the article
         date_modified (str): the date of last modification for the article
     """
-
-    def __init__(self, id: str, url: str, title: str, date_modified: str):
-        self.id = id
-        self.url = url
-        self.title = title
-        self.date_modified = date_modified
-
-    def __repr__(self) -> str:
-        """Return a string representation of the article
-        """
-        return f"{self.__class__.__name__}((id={self.id},url={self.url},title={self.title},date_modified={self.date_modified})"
+    id: str = attr.ib()
+    url: str = attr.ib()
+    title: str = attr.ib()
+    date_modified: str = attr.ib()
 
 
+@attr.s
 class Result:
     """A result from a single API call
 
@@ -36,25 +32,19 @@ class Result:
         url (str): the URL of the API query
         total (int): the total number of articles for the query. -1 if not available.
     """
-
-    def __init__(self, articles: 'list[Article]', url: str, total: int = -1):
-        self.articles = articles
-        self.url = url
-        self.total = total
-
-    def __repr__(self) -> str:
-        """Return a string representation of the result
-        """
-        return f"{self.__class__.__name__}((url={self.url},articles={self.articles},total={self.total})"
+    articles: 'list[Article]' = attr.ib()
+    url: str = attr.ib()
+    total: int = attr.ib(default=-1)
 
 
 yle_api: str = "https://yle-fi-search.api.yle.fi/v1/search"
 
 
-def query_yle(query: str, language: str, from_date: str, to_date: str, batch_size: int = 10000) -> Iterator[Result]:
+async def query_yle(session: ClientSession, query: str, language: str, from_date: str, to_date: str, batch_size: int = 10000) -> AsyncIterable[Result]:
     """Query the YLE API for articles matching a query
 
     Args:
+        session (ClientSession): the aiohttp session to use
         query (str): the query string to search for
         language (str): language to search (either 'fi' or 'sv')
         from_date (str): date to search from (inclusive, YYYY-MM-DD)
@@ -65,7 +55,7 @@ def query_yle(query: str, language: str, from_date: str, to_date: str, batch_siz
         ValueError: when something goes wrong in the API call
 
     Yields:
-        Iterator[Result]: each Result contains the results from a single API call
+        AsyncIterable[Result]: each Result contains the results from a single API call
     """
     params = {
         'app_id': 'hakuylefi_v2_prod',
@@ -81,42 +71,42 @@ def query_yle(query: str, language: str, from_date: str, to_date: str, batch_siz
         'offset': 0,
         'limit': batch_size
     }
-    response = requests.get(yle_api, params)
-    if response.status_code != 200:
-        raise ValueError(
-            f"Got unexpected response code {response.status_code} for {response.url}.")
-    response_json = response.json()
-    if response_json is None:
-        raise ValueError(f"Got empty response for {response.url}")
-    if response_json['meta']['count'] > 10000:
-        raise ValueError(
-            f"Query results in {response_json['meta']['count']} results. The YLE API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
-    response = requests.get(yle_api, params)
-    while True:
-        if response.status_code != 200:
+    async with session.get(yle_api, params=params) as response:
+        if response.status != 200:
             raise ValueError(
-                f"Got unexpected response code {response.status_code} for {response.url}.")
-        response_json = response.json()
+                f"Got unexpected response code {response.status} for {response.url}.")
+        response_json = await response.json()
         if response_json is None:
             raise ValueError(f"Got empty response for {response.url}")
-        if len(response_json['data']) == 0:  # Got 0 results, assuming we're done.
-            break
-        articles = [Article(id=a['id'], url=a['url']['full'], title=a['headline'],
-                            date_modified=a['datePublished']) for a in response_json['data']]
-        yield Result(articles, response.url, response_json['meta']['count'])
-        params['offset'] += batch_size
-        if params['offset'] > response_json['meta']['count']:  # Got all results from the API.")
-            break
-        response = requests.get(yle_api, params)
+        if response_json['meta']['count'] > 10000:
+            raise ValueError(
+                f"Query results in {response_json['meta']['count']} results. The YLE API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+    while True:
+        async with session.get(yle_api, params=params) as response:
+            if response.status != 200:
+                raise ValueError(
+                    f"Got unexpected response code {response.status} for {response.url}.")
+            response_json = await response.json()
+            if response_json is None:
+                raise ValueError(f"Got empty response for {response.url}")
+            if len(response_json['data']) == 0:  # Got 0 results, assuming we're done.
+                break
+            articles = [Article(id=a['id'], url=a['url']['full'], title=a['headline'],
+                                date_modified=a['datePublished']) for a in response_json['data']]
+            yield Result(articles, str(response.url), response_json['meta']['count'])
+            params['offset'] += batch_size
+            if params['offset'] > response_json['meta']['count']:  # Got all results from the API.")
+                break
 
 
 is_api: str = "https://www.is.fi/api/search"
 
 
-def query_is(query: str, from_date: str, to_date: str, batch_size: int = 100) -> Iterator[Result]:
+async def query_is(session: ClientSession, query: str, from_date: str, to_date: str, batch_size: int = 100) -> AsyncIterable[Result]:
     """Query the IS API for articles matching a query
 
     Args:
+        session (ClientSession): the aiohttp session to use
         query (str): the query string to search for
         from_date (str): date to search from (inclusive, YYYY-MM-DD)
         to_date (str): date to search to (inclusive, YYYY-MM-DD)
@@ -126,7 +116,7 @@ def query_is(query: str, from_date: str, to_date: str, batch_size: int = 100) ->
         ValueError: when something goes wrong in the API call
 
     Yields:
-        Iterator[Result]: each Result contains the results from a single API call
+        AsyncIterable[Result]: each Result contains the results from a single API call
     """
     def _build_is_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
         return f"{is_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
@@ -134,41 +124,39 @@ def query_is(query: str, from_date: str, to_date: str, batch_size: int = 100) ->
         datetime.fromisoformat(from_date)) * 1000)
     date_end = int(datetime.timestamp(
         datetime.fromisoformat(to_date) + timedelta(days=1)) * 1000)
-    response = requests.get(_build_is_url(
-        query, 9950, 50, date_start, date_end))
-    if response.status_code != 200:
-        raise ValueError(
-            f"Got unexpected response code {response.status_code} for {response.url}.")
-    response_json = response.json()
-    if len(response_json) != 0:
-        raise ValueError("Query results in more than 9950 results. The IS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
-    offset = 0
-    response = requests.get(_build_is_url(
-        query, offset, batch_size, date_start, date_end))
-    while True:
-        if response.status_code != 200:
+    async with session.get(_build_is_url(
+            query, 9950, 50, date_start, date_end)) as response:
+        if response.status != 200:
             raise ValueError(
-                f"Got unexpected response code {response.status_code} for {response.url}.")
-        response_json = response.json()
-        if response_json is None:
-            raise ValueError(f"Got empty response for {response.url}")
-        if len(response_json) == 0:  # Got 0 results, assuming we're done.
-            break
-        articles = [Article(id=a['id'], url='https://www.is.fi'+a['href'],
-                            title=a['title'], date_modified=a['displayDate']) for a in response_json]
-        yield Result(articles, response.url, -1)
-        offset += batch_size
-        response = requests.get(_build_is_url(
-            query, offset, batch_size, date_start, date_end))
+                f"Got unexpected response code {response.status} for {response.url}.")
+        response_json = await response.json()
+        if len(response_json) != 0:
+            raise ValueError("Query results in more than 9950 results. The IS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+    offset = 0
+    while True:
+        async with session.get(_build_is_url(query, offset, batch_size, date_start, date_end)) as response:
+            if response.status != 200:
+                raise ValueError(
+                    f"Got unexpected response code {response.status} for {response.url}.")
+            response_json = await response.json()
+            if response_json is None:
+                raise ValueError(f"Got empty response for {response.url}")
+            if len(response_json) == 0:  # Got 0 results, assuming we're done.
+                break
+            articles = [Article(id=a['id'], url='https://www.is.fi'+a['href'],
+                                title=a['title'], date_modified=a['displayDate']) for a in response_json]
+            yield Result(articles, str(response.url), -1)
+            offset += batch_size
 
 
 il_api: str = "https://api.il.fi/v1/articles/search"
 
 
-def query_il(query: str, from_date: str, to_date: str, batch_size: int = 200) -> Iterator[Result]:
+async def query_il(session: ClientSession, query: str, from_date: str, to_date: str, batch_size: int = 200) -> AsyncIterable[Result]:
     """Query the IL API for articles matching a query
 
     Args:
+        session (ClientSession): the aiohttp session to use
         query (str): the query string to search for
         from_date (str): date to search from (inclusive, YYYY-MM-DD)
         to_date (str): date to search to (inclusive, YYYY-MM-DD)
@@ -178,7 +166,7 @@ def query_il(query: str, from_date: str, to_date: str, batch_size: int = 200) ->
         ValueError: when something goes wrong in the API call
 
     Yields:
-        Iterator[Result]: each Result contains the results from a single API call
+        AsyncIterable[Result]: each Result contains the results from a single API call
     """
     params = {
         'date_start': from_date,
@@ -187,35 +175,34 @@ def query_il(query: str, from_date: str, to_date: str, batch_size: int = 200) ->
         'offset': 0,
         'limit': batch_size
     }
-    response = requests.get(il_api, params)
     while True:
-        if response.status_code != 200:
-            raise ValueError(
-                f"Got unexpected response code {response.status_code} for {response.url}.")
-        response_json = response.json()['response']
-        if response_json is None:
-            raise ValueError(f"Got empty response for {response.url}")
-        if len(response_json) == 0:  # Got 0 results, assuming we're done.
-            break
-        articles = [Article(
-            id=a['article_id'],
-            url='http://iltalehti.fi/' +
-                a['category']['category_name']+"/a/"+a['article_id'],
-            title=a['title'],
-            date_modified=a['updated_at'] if a['updated_at'] is not None else a['published_at']
-        ) for a in response_json]
-        yield Result(articles, response.url, -1)
-        params['offset'] += batch_size
-        response = requests.get(il_api, params)
-
+        async with session.get(il_api, params=params) as response:
+            if response.status != 200:
+                raise ValueError(
+                    f"Got unexpected response code {response.status} for {response.url}.")
+            response_json = (await response.json())['response']
+            if response_json is None:
+                raise ValueError(f"Got empty response for {response.url}")
+            if len(response_json) == 0:  # Got 0 results, assuming we're done.
+                break
+            articles = [Article(
+                id=a['article_id'],
+                url='http://iltalehti.fi/' +
+                    a['category']['category_name']+"/a/"+a['article_id'],
+                title=a['title'],
+                date_modified=a['updated_at'] if a['updated_at'] is not None else a['published_at']
+            ) for a in response_json]
+            yield Result(articles, str(response.url), -1)
+            params['offset'] += batch_size
 
 hs_api: str = "https://www.hs.fi/api/search"
 
 
-def query_hs(query: str, from_date: str, to_date: str, batch_size: int = 100):
+async def query_hs(session: ClientSession, query: str, from_date: str, to_date: str, batch_size: int = 100) -> AsyncIterable[Result]:
     """Query the HS API for articles matching a query
 
     Args:
+        session (ClientSession): the aiohttp session to use
         query (str): the query string to search for
         from_date (str): date to search from (inclusive, YYYY-MM-DD)
         to_date (str): date to search to (inclusive, YYYY-MM-DD)
@@ -225,7 +212,7 @@ def query_hs(query: str, from_date: str, to_date: str, batch_size: int = 100):
         ValueError: when something goes wrong in the API call
 
     Yields:
-        Iterator[Result]: each Result contains the results from a single API call
+        AsyncIterable[Result]: each Result contains the results from a single API call
     """
     def _build_hs_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
         return f"{hs_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
@@ -233,29 +220,26 @@ def query_hs(query: str, from_date: str, to_date: str, batch_size: int = 100):
         datetime.fromisoformat(from_date)) * 1000)
     date_end = int(datetime.timestamp(
         datetime.fromisoformat(to_date) + timedelta(days=1)) * 1000)
-    response = requests.get(_build_hs_url(
-        query, 9950, 50, date_start, date_end))
-    if response.status_code != 200:
-        raise ValueError(
-            f"Got unexpected response code {response.status_code} for {response.url}.")
-    response_json = response.json()
-    if len(response_json) != 0:
-        raise ValueError("Query results in more than 9950 results. The HS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
-    offset = 0
-    response = requests.get(_build_hs_url(
-        query, offset, batch_size, date_start, date_end))
-    while True:
-        if response.status_code != 200:
+    async with session.get(_build_hs_url(
+            query, 9950, 50, date_start, date_end)) as response:
+        if response.status != 200:
             raise ValueError(
-                f"Got unexpected response code {response.status_code} for {response.url}.")
-        response_json = response.json()
-        if response_json is None:
-            raise ValueError(f"Got empty response for {response.url}")
-        if len(response_json) == 0:  # Got 0 results, assuming we're done.
-            break
-        articles = [Article(id=a['id'], url='https://www.hs.fi'+a['href'],
-                            title=a['title'], date_modified=a['displayDate']) for a in response_json]
-        yield Result(articles, response.url, -1)
-        offset += batch_size
-        response = requests.get(_build_hs_url(
-            query, offset, batch_size, date_start, date_end))
+                f"Got unexpected response code {response.status} for {response.url}.")
+        response_json = await response.json()
+        if len(response_json) != 0:
+            raise ValueError("Query results in more than 9950 results. The HS API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+    offset = 0
+    while True:
+        async with session.get(_build_hs_url(query, offset, batch_size, date_start, date_end)) as response:
+            if response.status != 200:
+                raise ValueError(
+                    f"Got unexpected response code {response.status} for {response.url}.")
+            response_json = await response.json()
+            if response_json is None:
+                raise ValueError(f"Got empty response for {response.url}")
+            if len(response_json) == 0:  # Got 0 results, assuming we're done.
+                break
+            articles = [Article(id=a['id'], url='https://www.hs.fi'+a['href'],
+                                title=a['title'], date_modified=a['displayDate']) for a in response_json]
+            yield Result(articles, str(response.url), -1)
+            offset += batch_size

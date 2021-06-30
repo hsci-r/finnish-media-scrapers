@@ -3,18 +3,19 @@
 """
 
 import argparse
+import asyncio
 import csv
 import logging
 import os
 import random
 from time import sleep
 
-import requests
+import aiohttp
 
 logging.basicConfig(level=logging.INFO)
 
 
-def parse_arguments():
+def _parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-i', '--input', help="input CSV file containing articles to fetch (from query-il, query-is or query-yle)", required=True)
@@ -27,20 +28,27 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def main():
-    args = parse_arguments()
+async def _amain():
+    args = _parse_arguments()
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
     os.makedirs(args.output, exist_ok=True)
     with open(args.input) as input_file:
-        csv_input = csv.DictReader(input_file)
-        for article in csv_input:
-            article_file_name = os.path.join(args.output, article['id']+".html")
-            if not os.path.exists(article_file_name):
-                with open(article_file_name, "wb") as article_file:
-                    article_file.write(requests.get(article['url']).content)
-                logging.info("wrote %s into %s", article['url'], article_file_name)
-                sleep(random.randrange(args.delay*2))
+        async with aiohttp.ClientSession() as session:
+            csv_input = csv.DictReader(input_file)
+            for article in csv_input:
+                article_file_name = os.path.join(args.output, article['id']+".html")
+                if not os.path.exists(article_file_name):
+                    async with session.get(article['url']) as response:
+                        content = await response.text()
+                        with open(article_file_name, "w") as article_file:
+                            article_file.write(content)
+                    logging.info("wrote %s into %s", article['url'], article_file_name)
+                    sleep(random.randrange(args.delay*2))
+
+
+def main():
+    asyncio.run(_amain())
 
 
 if __name__ == '__main__':
