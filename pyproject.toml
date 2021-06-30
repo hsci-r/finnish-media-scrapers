@@ -4,6 +4,20 @@ version = "1.1.0"
 description = "Scrapers for extracting articles from Finnish journalistic media websites."
 authors = ["Human Sciences - Computing Interaction Research Group <eetu.makela@helsinki.fi>"]
 license = "MIT"
+repository = "https://github.com/hsci-r/finnish-media-scraper/"
+documentation = "https://finnish-media-scrapers.readthedocs.io/"
+readme = "README.md"
+keywords = [
+  "Web scraping",
+  "Media research"
+]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Science/Research",
+  "Topic :: Text Processing :: Markup :: HTML",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+  "Operating System :: OS Independent"
+]
 
 [tool.poetry.scripts]
 fms-query-yle = "finnish_media_scrapers.scripts.query_yle:main"
