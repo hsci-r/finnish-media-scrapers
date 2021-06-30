@@ -14,8 +14,8 @@ async def prepare_session_hs(
     by logging in using the provided user id and password.
 
     Raises:
-        TimeoutException: if the web driver is unable to find the elements it is looking for in 30 seconds.
-                          May indicate changes to the loging page structure.
+        TimeoutError: if the web driver is unable to find the elements it is looking for in 30 seconds.
+                      May indicate changes to the loging page structure.
 
     Args:
         session (Page): the pyppeteer session to use
