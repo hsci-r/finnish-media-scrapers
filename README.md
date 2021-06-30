@@ -34,7 +34,9 @@ Apart from using the scripts, the functionality of the package is also provided 
 
 First, query the articles you want using `fms-query-hs`. For example, `fms-query-hs -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
 
-For downloading articles, this scraper requires 1) a user id and password for Helsingin Sanomat and 2) a Selenium Docker container to be running. After installing Docker, run `docker run -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-1-20210215` in another console before invoking the script. After these prequisites are fulfilled, you can fetch the articles using `fms-fetch-hs`. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp -u username -p password`. After fetching the articles, extract texts with `fms-html-to-text-hs -o hs-sdp-output hs-sdp`.
+For downloading articles, use `fms-fetch-hs`. This scraper requires a user id and password for Helsingin Sanomat. Technically, it uses [pyppeteer](https://pypi.org/project/pyppeteer/) to control a headless Chromium browser to log in and ensure the dynamically rendered content in HS articles is captured. To ensure a compatible Chromium, when first running the tool, pyppeteer will download an isolated version of Chromium for itself, causing some ~150MB of network traffic and disk space usage. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp -u username -p password`.
+
+After fetching the articles, extract texts with e.g. `fms-html-to-text-hs -o hs-sdp-output hs-sdp`.
 
 Known special considerations:
 
@@ -77,4 +79,4 @@ For more information on the scrapers, please contact associate professor [Eetu M
 
 ## Development
 
-To set up a development environment, you need [conda](https://docs.conda.io/en/latest/) or [poetry](https://python-poetry.org/). If using conda, you can bootstrap the virtual environment with `conda env create -f requirements.yml`. This will also install poetry to the venv. Then, use poetry to install and manage the dependencies and build process (`poetry install`).
+To set up a development environment, you need [poetry](https://python-poetry.org/). Then, use poetry to install and manage the dependencies and build process (`poetry install`).
