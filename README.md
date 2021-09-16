@@ -37,7 +37,9 @@ Apart from using the scripts, the functionality of the package is also provided 
 
 First, query the articles you want using `fms-query-hs`. For example, `fms-query-hs -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
 
-For downloading articles, use `fms-fetch-hs`. This scraper requires a user id and password for Helsingin Sanomat. Technically, it uses [pyppeteer](https://pypi.org/project/pyppeteer/) to control a headless Chromium browser to log in and ensure the dynamically rendered content in HS articles is captured. To ensure a compatible Chromium, when first running the tool, pyppeteer will download an isolated version of Chromium for itself, causing some ~150MB of network traffic and disk space usage. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp -u username -p password`.
+For downloading articles, use `fms-fetch-hs` with adding credentials. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp -u username -p password`. This scraper requires paid Helsingin Sanomat credentials (user id and password). You can create them [https://www.hs.fi/](https://www.hs.fi/) with clicking "Kirjaudu" button and following the instructions for a news subscription. 
+
+Technically, the scraper uses [pyppeteer](https://pypi.org/project/pyppeteer/) to control a headless Chromium browser to log in and ensure the dynamically rendered content in HS articles is captured. To ensure a compatible Chromium, when first running the tool, pyppeteer will download an isolated version of Chromium for itself, causing some ~150MB of network traffic and disk space usage. 
 
 After fetching the articles, extract texts with e.g. `fms-html-to-text-hs -o hs-sdp-output hs-sdp`.
 
