@@ -7,6 +7,7 @@ import asyncio
 import csv
 import logging
 import random
+from datetime import datetime
 from time import sleep
 
 import aiohttp
@@ -21,7 +22,8 @@ def _parse_arguments():
     parser.add_argument('-f', '--from-date',
                         help="from date (inclusive, YYYY-MM-DD)", required=True)
     parser.add_argument(
-        '-t', '--to-date', help="to date (inclusive, YYYY-MM-DD, defaults to today)")
+        '-t', '--to-date', help="to date (inclusive, YYYY-MM-DD, defaults to today)",
+        default=datetime.today().strftime('%Y-%m-%d'))
     parser.add_argument(
         '-q', '--query', help="query string to search for", required=True)
     parser.add_argument(
