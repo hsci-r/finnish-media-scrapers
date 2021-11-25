@@ -48,6 +48,7 @@ autopep8 = "^1.5.7"
 pre-commit = "^2.13.0"
 pylint = "^2.8.3"
 pandas = "^1.2.5"
+pytest = "^6.2.5"
 
 [tool.poetry.extras]
 docs = ["Sphinx","sphinx-rtd-theme"]

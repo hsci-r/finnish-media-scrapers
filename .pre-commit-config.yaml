@@ -5,7 +5,15 @@ repos:
     rev: v4.0.1
     hooks:
       - id: trailing-whitespace
+        exclude: |
+            (?x)^(
+               tests/example_articles/.*
+            )$
       - id: end-of-file-fixer
+        exclude: |
+            (?x)^(
+               tests/example_articles/.*
+            )$
       - id: check-yaml
       - id: check-added-large-files
   - repo: https://github.com/pycqa/isort
@@ -17,7 +25,7 @@ repos:
     rev: v1.5.7
     hooks:
       - id: autopep8
-        args: ["--max-line-length=100", "-i"]
+        args: ["--max-line-length=120", "-i"]
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.9.0
     hooks:
@@ -29,4 +37,4 @@ repos:
         entry: pylint
         language: system
         types: [python]
-        args: ["--fail-under=7.0"]
+        args: ["--max-line-length=120","--fail-under=7.0"]
