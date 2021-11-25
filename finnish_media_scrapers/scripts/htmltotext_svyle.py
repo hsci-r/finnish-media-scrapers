@@ -37,9 +37,10 @@ def main():
                     content = extract_text_from_svyle_html(input_file)
                     with open(output_file_name, "w") as output_file:
                         output_file.write(content)
-                    logging.info("Extracted text from %s into %s.", input_file, output_file)
+                    logging.info("Extracted text from %s into %s.",
+                                 input_file_name, output_file_name)
                 except ValueError:
-                    logging.error("Couldn't extract text from %s.", input_file)
+                    logging.error("Couldn't extract text from %s.", input_file_name)
 
 
 if __name__ == '__main__':
