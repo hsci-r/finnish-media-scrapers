@@ -2,11 +2,9 @@
 
 [![PyPI version](https://badge.fury.io/py/finnish-media-scrapers.svg)](https://badge.fury.io/py/finnish-media-scrapers) [![DOI](https://zenodo.org/badge/335605978.svg)](https://zenodo.org/badge/latestdoi/335605978) [![Documentation Status](https://readthedocs.org/projects/finnish-media-scrapers/badge/?version=latest)](https://finnish-media-scrapers.readthedocs.io/en/latest/?badge=latest)
 
-Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/).
+Scrapers for extracting articles from Finnish journalistic media websites by the [University of Helsinki](https://www.helsinki.fi/) [Human Sciences – Computing Interaction research group](https://heldig.fi/hsci/). Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/).
 
-Included are scrapers for [YLE](https://www.yle.fi/uutiset/), [Helsingin Sanomat](https://www.hs.fi/), [Iltalehti](https://www.iltalehti.fi/) and [Iltasanomat](https://www.is.fi/). See below for limitations relating to individual sources.
-
-As a design principle, these scrapers have been designed to extract the articles in as trustworthy a manner as possible, as required for content-focused research targetting the text of those articles. Thus, the scrapers will complain loudly for example if your search query matches more articles than the APIs are willing to return, or if the plain text extractors encounter new article layouts that have not yet been verified to extract correctly.
+The scrapers have been designed for researchers needing a local corpus of news article texts matching a specified set of query keywords as well as temporal limitations. As a design principle, these scrapers have been designed to extract the articles in as trustworthy a manner as possible, as required for content-focused research targetting the text of those articles (for an example of such research, see e.g. [here](https://researchportal.helsinki.fi/en/publications/a-year-in-the-spotlight-who-got-the-attention-of-the-media-who-wa)). Thus, the scrapers will complain loudly for example if your search query matches more articles than the APIs are willing to return, or if the plain text extractors encounter new article layouts that have not yet been verified to extract correctly. Further, the process is split into distinct parts that 1) query, 2) fetch, 3) convert to text and 4) post-filter the articles separately. Each of these steps also records its output as separate files. Each of these steps also records its output as separate files. This way, the tools can be used in a versatile manner. Further, a good record is maintained of the querying and filtering process for reproducibility as well as error analysis.
 
 ## Installation
 
@@ -37,9 +35,9 @@ Apart from using the scripts, the functionality of the package is also provided 
 
 First, query the articles you want using `fms-query-hs`. For example, `fms-query-hs -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
 
-For downloading articles, use `fms-fetch-hs` with adding credentials. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp -u username -p password`. This scraper requires paid Helsingin Sanomat credentials (user id and password). You can create them in [https://www.hs.fi/](https://www.hs.fi/) with clicking "Kirjaudu" button and following the instructions for a news subscription. 
+For downloading articles, use `fms-fetch-hs` with adding credentials. For example `fms-fetch-hs -i hs-sdp.csv -o hs-sdp -u username -p password`. This scraper requires paid Helsingin Sanomat credentials (user id and password). You can create them in [https://www.hs.fi/](https://www.hs.fi/) with clicking "Kirjaudu" button and following the instructions for a news subscription.
 
-Technically, the scraper uses [pyppeteer](https://pypi.org/project/pyppeteer/) to control a headless Chromium browser to log in and ensure the dynamically rendered content in HS articles is captured. To ensure a compatible Chromium, when first running the tool, pyppeteer will download an isolated version of Chromium for itself, causing some ~150MB of network traffic and disk space usage. 
+Technically, the scraper uses [pyppeteer](https://pypi.org/project/pyppeteer/) to control a headless Chromium browser to log in and ensure the dynamically rendered content in HS articles is captured. To ensure a compatible Chromium, when first running the tool, pyppeteer will download an isolated version of Chromium for itself, causing some ~150MB of network traffic and disk space usage.
 
 After fetching the articles, extract texts with e.g. `fms-html-to-text-hs -o hs-sdp-output hs-sdp`.
 
