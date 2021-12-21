@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "finnish-media-scrapers"
-version = "1.1.0"
+version = "1.1.1"
 description = "Scrapers for extracting articles from Finnish journalistic media websites."
 authors = ["Human Sciences - Computing Interaction Research Group <eetu.makela@helsinki.fi>"]
 license = "MIT"
