@@ -5,7 +5,7 @@ thus requiring a Selenium session to enable fetching the articles.
 """
 
 from pyppeteer.browser import Page
-
+from pyppeteer.errors import NetworkError
 
 async def prepare_session_hs(
         session: Page,
@@ -62,7 +62,12 @@ async def fetch_article_hs(
         str: the HTML of the article
     """
     max_web_driver_wait = 1000 * max_web_driver_wait
-    await session.goto(url, timeout=max_web_driver_wait)
+    try:
+        await session.goto(url, timeout=max_web_driver_wait)
+    except NetworkError as network_exception:
+        raise ValueError(
+            f"The page doesn't exist for {url}."
+        ) from network_exception
     try:
         main_content = await session.waitForXPath("//div[@id='page-main-content']/following-sibling::*", timeout=max_web_driver_wait)
         tag_name = await (await main_content.getProperty('tagName')).jsonValue()

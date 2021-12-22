@@ -66,6 +66,9 @@ async def _amain():
                         sleep(random.randrange(args.delay*2))
                     else:
                         logging.info("Skipping %s as %s already exists.", url, file)
+        except Exception as e:
+            print(e)
+            continue
         finally:
             await session.close()
     finally:
