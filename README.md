@@ -86,17 +86,22 @@ Pull requests welcome! To set up a development environment, you need [poetry](ht
 
 ## Citation 
 
-Markdown:
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03504/status.svg)](https://doi.org/10.21105/joss.03504)
 
-HTML:
-<a style="border-width:0" href="https://doi.org/10.21105/joss.03504">
-  <img src="https://joss.theoj.org/papers/10.21105/joss.03504/status.svg" alt="DOI badge" >
-</a>
-
-reStructuredText:
-.. image:: https://joss.theoj.org/papers/10.21105/joss.03504/status.svg
-   :target: https://doi.org/10.21105/joss.03504
+```
+@article{Mäkelä2021,
+  doi = {10.21105/joss.03504},
+  url = {https://doi.org/10.21105/joss.03504},
+  year = {2021},
+  publisher = {The Open Journal},
+  volume = {6},
+  number = {68},
+  pages = {3504},
+  author = {Eetu Mäkelä and Pihla Toivanen},
+  title = {Finnish Media Scrapers},
+  journal = {Journal of Open Source Software}
+}
+```
 
 ## Related work
 
