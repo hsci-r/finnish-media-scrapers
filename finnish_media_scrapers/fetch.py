@@ -63,7 +63,11 @@ async def fetch_article_hs(
     """
     max_web_driver_wait = 1000 * max_web_driver_wait
     try:
-        await session.goto(url, timeout=max_web_driver_wait)
+        response = await session.goto(url, timeout=max_web_driver_wait)
+        if response.status == 404:
+            raise ValueError(
+                f"The page doesn't exist for {url}."
+            )
     except NetworkError as network_exception:
         raise ValueError(
             f"The page doesn't exist for {url}."
