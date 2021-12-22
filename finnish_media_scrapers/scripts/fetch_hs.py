@@ -57,8 +57,12 @@ async def _amain():
                     url = article['url']
                     file = os.path.join(args.output, str(article['id'])+".html")
                     if not os.path.exists(file):
-                        article = await fetch_article_hs(
+                        try:
+                            article = await fetch_article_hs(
                             session, url, args.max_web_driver_wait)
+                        except Exception as e:
+                            logging.info(e)
+                            continue
                         with open(file, "w") as article_file:
                             article_file.write(
                                 "<!DOCTYPE html><head><meta charset='utf-8'></head>" + article + "</html>")
