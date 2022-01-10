@@ -51,7 +51,7 @@ async def _amain():
                                      args.password, args.max_web_driver_wait)
             logging.info("Logged in.")
             os.makedirs(args.output, exist_ok=True)
-            with open(args.input) as input_file:
+            with open(args.input, encoding="utf-8") as input_file:
                 csv_input = csv.DictReader(input_file)
                 for article in csv_input:
                     url = article['url']
@@ -59,11 +59,11 @@ async def _amain():
                     if not os.path.exists(file):
                         try:
                             article = await fetch_article_hs(
-                            session, url, args.max_web_driver_wait)
+                                session, url, args.max_web_driver_wait)
                         except Exception as e:
                             logging.info(e)
                             continue
-                        with open(file, "w") as article_file:
+                        with open(file, "w", encoding="utf-8") as article_file:
                             article_file.write(
                                 "<!DOCTYPE html><head><meta charset='utf-8'></head>" + article + "</html>")
                         logging.info("Wrote article %s into %s", url, file)

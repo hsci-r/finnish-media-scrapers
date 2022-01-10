@@ -43,7 +43,7 @@ async def _amain():
 
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
-    with open(args.output, "w") as output_file:
+    with open(args.output, "w", encoding="utf-8") as output_file:
         csv_output = csv.writer(output_file)
         csv_output.writerow(['id', 'url', 'title', 'date_modified'])
         total_count = 0

@@ -32,10 +32,10 @@ def main():
         for input_file_name in glob.glob(input_files_glob):
             output_file_name = os.path.join(args.output_directory, Path(
                 input_file_name).name).replace(".html", ".txt")
-            with open(input_file_name) as input_file:
+            with open(input_file_name, encoding="utf-8") as input_file:
                 try:
                     content = extract_text_from_il_html(input_file)
-                    with open(output_file_name, "w") as output_file:
+                    with open(output_file_name, "w", encoding="utf-8") as output_file:
                         output_file.write(content)
                     logging.info("Extracted text from %s into %s.",
                                  input_file_name, output_file_name)

@@ -38,7 +38,7 @@ def main():
         query_strings = map(query_strings, lambda l: l.lower())
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
-    with open(args.input) as inf, open(args.output, 'w') as outf:
+    with open(args.input, encoding="utf-8") as inf, open(args.output, 'w', encoding="utf-8") as outf:
         csv_input = csv.DictReader(inf)
         csv_output = csv.DictWriter(outf, [*csv_input.fieldnames, 'matches'])
         csv_output.writeheader()

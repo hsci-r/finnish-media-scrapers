@@ -15,7 +15,7 @@ from finnish_media_scrapers.htmltotext import (extract_text_from_hs_html,
 def remove_content(input_file, output_file):
     """Utility function to remove all content from HTML articles so that no IPR problems remain when using them in tests"""
     from bs4 import BeautifulSoup
-    with open(input_file) as inf, open(output_file, 'w') as outf:
+    with open(input_file, encoding="utf-8") as inf, open(output_file, 'w', encoding="utf-8") as outf:
         soup = BeautifulSoup(inf, 'lxml')
         for text_node in soup.find_all(text=True):
             text_node.replace_with("TEXT")

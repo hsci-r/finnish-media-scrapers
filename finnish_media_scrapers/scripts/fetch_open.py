@@ -33,7 +33,7 @@ async def _amain():
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
     os.makedirs(args.output, exist_ok=True)
-    with open(args.input) as input_file:
+    with open(args.input, encoding="utf-8") as input_file:
         async with aiohttp.ClientSession() as session:
             csv_input = csv.DictReader(input_file)
             for article in csv_input:
@@ -41,7 +41,7 @@ async def _amain():
                 if not os.path.exists(article_file_name):
                     async with session.get(article['url']) as response:
                         content = await response.text()
-                        with open(article_file_name, "w") as article_file:
+                        with open(article_file_name, "w", encoding="utf-8") as article_file:
                             article_file.write(content)
                     logging.info("wrote %s into %s", article['url'], article_file_name)
                     sleep(random.randrange(args.delay*2))
