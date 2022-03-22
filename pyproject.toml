@@ -32,6 +32,7 @@ fms-html-to-text-il = "finnish_media_scrapers.scripts.htmltotext_il:main"
 fms-html-to-text-is = "finnish_media_scrapers.scripts.htmltotext_is:main"
 fms-html-to-text-hs = "finnish_media_scrapers.scripts.htmltotext_hs:main"
 fms-post-filter = "finnish_media_scrapers.scripts.post_filter:main"
+fms-login-hs = "finnish_media_scrapers.scripts.login_hs:main"
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<4.0"
@@ -42,6 +43,8 @@ aiohttp = "^3.7.4"
 pyppeteer = "^0.2.5"
 Sphinx = {version = "^4.0.2", optional = true}
 sphinx-rtd-theme = {version = "^0.5.2", optional = true}
+selenium = "^4.1.3"
+webdriver-manager = "^3.5.4"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.7"
