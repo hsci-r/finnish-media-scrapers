@@ -47,13 +47,6 @@ async def _amain():
     if args.quiet:
         logging.basicConfig(level=logging.ERROR)
     try:
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument("--window-size=1920,1080")
-        #driver = webdriver.Chrome(options=chrome_options, 
         driver = webdriver.Chrome(ChromeDriverManager().install())
         driver.implicitly_wait(10)
         try:
@@ -65,18 +58,79 @@ async def _amain():
             driver.switch_to.default_content()
             login = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'Kirjaudu')]")))
             login.click()
-
             user = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.ID, "username")))
             user.send_keys(args.username)
 
             passw = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.ID, "password")))
             passw.send_keys(args.password)
 
+            print("sent keys")
+
+            submit = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type=submit]")))
+            submit.click()
+
+            print("submitted")
+
+            sleep(2)
+            
+            #WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.ID, "#ddStyleCaptchaBody1647967644328")))
+            #WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '[z-index="2147483647"]')))
+           # print(driver.find_element_by_css_selector('[z-index="2147483647"]'))
+
+            #divs = driver.find_elements_by_tag_name('div')
+            #for d in divs:
+            #    print(d.get_attribute('innerHTML'))
+
+
+            print("Captcha opened")
+            while True:
+                try:
+                    res = driver.find_element_by_css_selector('div[style="height:100vh;width:100%;position:absolute;top:0;left:0;z-index:2147483647;background-color:#ffffff;"]')
+                    html = res.get_attribute('innerHTML')
+                    if "iframe" not in html:
+                        break
+                except:
+                    break
+                sleep(2)
+
+            print("Captcha closed")
+
+            user = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.ID, "username")))
+            user.send_keys(args.username)
+
+            passw = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.ID, "password")))
+            passw.send_keys(args.password)
+
+            print("sent keys")
+
             submit = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type=submit]")))
             submit.click()
 
             cookies = driver.get_cookies()
             print(cookies)
+            
+            '''
+
+            captcha = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.ID ,"recaptcha-anchor")))
+
+  
+
+            cookies = driver.get_cookies()
+            print(cookies)
+
+            elem = WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "captcha__human__title")) 
+            )
+
+            second = driver.find_elements_by_tag_name('iframe')[1]
+            driver.switch_to.frame(second)
+            
+
+            #captcha_frame = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//iframe[@title='reCAPTCHA']")))
+            #driver.switch_to.frame(captcha_frame)
+            captcha = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID ,"recaptcha-anchor")))
+            captcha.click()
+            '''
 
             
         finally:
