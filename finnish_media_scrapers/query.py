@@ -216,8 +216,10 @@ async def query_hs(session: ClientSession, query: str, from_date: str, to_date: 
     """
     def _build_hs_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
         return f"{hs_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
+
     def _build_article_url(href: str) -> str:
-        if "http" in href or "www" in href: return href
+        if "http" in href or "www" in href:
+            return href
         return 'https://www.hs.fi'+href
     date_start = int(datetime.timestamp(
         datetime.fromisoformat(from_date)) * 1000)
