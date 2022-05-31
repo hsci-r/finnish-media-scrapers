@@ -7,6 +7,7 @@ thus requiring a Selenium session to enable fetching the articles.
 from pyppeteer.browser import Page
 from pyppeteer.errors import NetworkError
 
+
 async def prepare_session_hs(
         session: Page,
         username: str, password: str, max_web_driver_wait: int = 30):

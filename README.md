@@ -33,7 +33,7 @@ Apart from using the scripts, the functionality of the package is also provided 
 
 ### Helsingin Sanomat
 
-### Helsingin Sanomat has added captcha to their login site, which means that fms-fetch-hs script is not working at the moment. 
+### Helsingin Sanomat has added captcha to their login site, which means that fms-fetch-hs script is not working at the moment.
 
 First, query the articles you want using `fms-query-hs`. For example, `fms-query-hs -f 2020-02-16 -t 2020-02-18 -o hs-sdp.csv -q SDP`.
 
@@ -86,7 +86,7 @@ For more information on the scrapers, please contact associate professor [Eetu M
 
 Pull requests welcome! To set up a development environment, you need [poetry](https://python-poetry.org/). Then, use poetry to install and manage the dependencies and build process (`poetry install`).
 
-## Citation 
+## Citation
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03504/status.svg)](https://doi.org/10.21105/joss.03504)
 
