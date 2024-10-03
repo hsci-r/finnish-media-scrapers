@@ -119,7 +119,7 @@ async def query_is(session: ClientSession, query: str, from_date: str, to_date: 
         AsyncIterable[Result]: each Result contains the results from a single API call
     """
     def _build_is_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
-        return f"{is_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
+        return f"{is_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}/keyword"
     date_start = int(datetime.timestamp(
         datetime.fromisoformat(from_date)) * 1000)
     date_end = int(datetime.timestamp(
@@ -215,7 +215,7 @@ async def query_hs(session: ClientSession, query: str, from_date: str, to_date: 
         AsyncIterable[Result]: each Result contains the results from a single API call
     """
     def _build_hs_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
-        return f"{hs_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}"
+        return f"{hs_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}/keyword"
 
     def _build_article_url(href: str) -> str:
         if "http" in href or "www" in href:
