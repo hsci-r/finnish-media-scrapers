@@ -56,7 +56,7 @@ async def _amain():
                 for article in response.articles:
                     csv_output.writerow([article.id, article.url,
                                         article.title, article.date_modified])
-                sleep(random.randrange(args.delay*2))
+                sleep(random.uniform(0, args.delay*2))
         logging.info("Processed %s articles in total.", total_count)
 
 

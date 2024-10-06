@@ -44,7 +44,7 @@ async def _amain():
                         with open(article_file_name, "w", encoding="utf-8") as article_file:
                             article_file.write(content)
                     logging.info("wrote %s into %s", article['url'], article_file_name)
-                    sleep(random.randrange(args.delay*2))
+                    sleep(random.uniform(0, args.delay*2))
 
 
 def main():
