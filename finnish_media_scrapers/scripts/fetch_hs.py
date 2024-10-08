@@ -67,7 +67,7 @@ async def _amain():
                             article_file.write(
                                 "<!DOCTYPE html><head><meta charset='utf-8'></head>" + article + "</html>")
                         logging.info("Wrote article %s into %s", url, file)
-                        sleep(random.randrange(args.delay*2))
+                        sleep(random.uniform(0, args.delay*2))
                     else:
                         logging.info("Skipping %s as %s already exists.", url, file)
         finally:
