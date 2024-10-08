@@ -168,6 +168,7 @@ def extract_text_from_hs_html(html: Union[str, TextIO]) -> str:
         raise ValueError("Parsing results in an empty article")
     return txt
 
+
 def extract_text_from_al_html(html: Union[str, TextIO]) -> str:
     """Extract article text from Helsingin Sanomat article HTML
 
@@ -217,8 +218,8 @@ def extract_text_from_al_html(html: Union[str, TextIO]) -> str:
     if txt == "":
         raise ValueError("Parsing results in an empty article")
     return txt
-    
-    
+
+
 def extract_text_from_sk_html(html: Union[str, TextIO]) -> str:
     """Extract article text from Helsingin Sanomat article HTML
 
@@ -268,4 +269,3 @@ def extract_text_from_sk_html(html: Union[str, TextIO]) -> str:
     if txt == "":
         raise ValueError("Parsing results in an empty article")
     return txt
-

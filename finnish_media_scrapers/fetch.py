@@ -42,6 +42,7 @@ async def prepare_session_hs(
     await submit.click()
     await session.waitForNavigation()
 
+
 async def fetch_article_hs(
         session: Page,
         url: str, max_web_driver_wait: int = 30) -> str:
@@ -251,5 +252,3 @@ async def prepare_session_sk(
     submit = await session.waitForSelector("button[type=submit]", timeout=max_web_driver_wait)
     await submit.click()
     await session.waitForNavigation()
-
-
