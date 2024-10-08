@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 def _parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-i', '--input', help="input CSV file containing articles to fetch (from query-il, query-is or query-yle)", required=True)
+        '-i', '--input', help="input CSV file containing articles to fetch (from query-il, query-is, query-al, query-sk or query-yle)", required=True)
     parser.add_argument(
         '-o', '--output', help="directory to fetch articles into", required=True)
     parser.add_argument(

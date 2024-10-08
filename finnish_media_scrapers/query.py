@@ -1,4 +1,4 @@
-"""Functions related to querying articles from the apis of YLE, Helsingin Sanomat (HS), Ilta-Sanomat (IS) and Iltalehti (IL)
+"""Functions related to querying articles from the apis of YLE, Helsingin Sanomat (HS), Ilta-Sanomat (IS), Aamulehti (AL), Satakunnan kansa (SK) and Iltalehti (IL)
 """
 from datetime import datetime, timedelta
 from typing import AsyncIterable
@@ -236,6 +236,116 @@ async def query_hs(session: ClientSession, query: str, from_date: str, to_date: 
     offset = 0
     while True:
         async with session.get(_build_hs_url(query, offset, batch_size, date_start, date_end)) as response:
+            if response.status != 200:
+                raise ValueError(
+                    f"Got unexpected response code {response.status} for {response.url}.")
+            response_json = await response.json()
+            if response_json is None:
+                raise ValueError(f"Got empty response for {response.url}")
+            if len(response_json) == 0:  # Got 0 results, assuming we're done.
+                break
+            articles = [Article(id=a['id'], url=_build_article_url(a['href']),
+                                title=a['title'], date_modified=a['displayDate']) for a in response_json]
+            yield Result(articles, str(response.url), -1)
+            offset += batch_size
+
+
+al_api: str = "https://www.aamulehti.fi/api/search"
+
+
+async def query_al(session: ClientSession, query: str, from_date: str, to_date: str, batch_size: int = 100) -> AsyncIterable[Result]:
+    """Query the AL API for articles matching a query
+
+    Args:
+        session (ClientSession): the aiohttp session to use
+        query (str): the query string to search for
+        from_date (str): date to search from (inclusive, YYYY-MM-DD)
+        to_date (str): date to search to (inclusive, YYYY-MM-DD)
+        batch_size (int, optional): How many entries to query for in a single API call. Values supported by the AL API are 50 and 100 (which is the default).
+
+    Raises:
+        ValueError: when something goes wrong in the API call
+
+    Yields:
+        AsyncIterable[Result]: each Result contains the results from a single API call
+    """
+    def _build_al_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
+        return f"{al_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}/keyword"
+
+    def _build_article_url(href: str) -> str:
+        if "http" in href or "www" in href:
+            return href
+        return 'https://www.aamulehti.fi'+href
+    date_start = int(datetime.timestamp(
+        datetime.fromisoformat(from_date)) * 1000)
+    date_end = int(datetime.timestamp(
+        datetime.fromisoformat(to_date) + timedelta(days=1)) * 1000)
+    async with session.get(_build_al_url(
+            query, 9950, 50, date_start, date_end)) as response:
+        if response.status != 200:
+            raise ValueError(
+                f"Got unexpected response code {response.status} for {response.url}.")
+        response_json = await response.json()
+        if len(response_json) != 0:
+            raise ValueError("Query results in more than 9950 results. The AL API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+    offset = 0
+    while True:
+        async with session.get(_build_al_url(query, offset, batch_size, date_start, date_end)) as response:
+            if response.status != 200:
+                raise ValueError(
+                    f"Got unexpected response code {response.status} for {response.url}.")
+            response_json = await response.json()
+            if response_json is None:
+                raise ValueError(f"Got empty response for {response.url}")
+            if len(response_json) == 0:  # Got 0 results, assuming we're done.
+                break
+            articles = [Article(id=a['id'], url=_build_article_url(a['href']),
+                                title=a['title'], date_modified=a['displayDate']) for a in response_json]
+            yield Result(articles, str(response.url), -1)
+            offset += batch_size
+
+
+sk_api: str = "https://www.satakunnankansa.fi/api/search"
+
+
+async def query_sk(session: ClientSession, query: str, from_date: str, to_date: str, batch_size: int = 100) -> AsyncIterable[Result]:
+    """Query the HS API for articles matching a query
+
+    Args:
+        session (ClientSession): the aiohttp session to use
+        query (str): the query string to search for
+        from_date (str): date to search from (inclusive, YYYY-MM-DD)
+        to_date (str): date to search to (inclusive, YYYY-MM-DD)
+        batch_size (int, optional): How many entries to query for in a single API call. Values supported by the SK API are 50 and 100 (which is the default).
+
+    Raises:
+        ValueError: when something goes wrong in the API call
+
+    Yields:
+        AsyncIterable[Result]: each Result contains the results from a single API call
+    """
+    def _build_sk_url(query: str, offset: int, limit: int, date_start: int, date_end: int) -> str:
+        return f"{hs_api}/{query}/kaikki/custom/new/{offset}/{limit}/{date_start}/{date_end}/keyword"
+
+    def _build_article_url(href: str) -> str:
+        if "http" in href or "www" in href:
+            return href
+        return 'https://www.satakunnankansa.fi'+href
+    date_start = int(datetime.timestamp(
+        datetime.fromisoformat(from_date)) * 1000)
+    date_end = int(datetime.timestamp(
+        datetime.fromisoformat(to_date) + timedelta(days=1)) * 1000)
+    async with session.get(_build_sk_url(
+            query, 9950, 50, date_start, date_end)) as response:
+        if response.status != 200:
+            raise ValueError(
+                f"Got unexpected response code {response.status} for {response.url}.")
+        response_json = await response.json()
+        if len(response_json) != 0:
+            raise ValueError("Query results in more than 9950 results. The SK API refuses to return more than 10000 results, so refusing to continue. You can work around this limitation by doing multiple queries on smaller timespans.")
+    offset = 0
+    while True:
+        async with session.get(_build_sk_url(query, offset, batch_size, date_start, date_end)) as response:
             if response.status != 200:
                 raise ValueError(
                     f"Got unexpected response code {response.status} for {response.url}.")
